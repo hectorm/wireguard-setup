@@ -108,7 +108,7 @@ build {
       "ufw default deny incoming",
       "ufw default allow outgoing",
       "ufw allow from any to any port 22 proto tcp",
-      "ufw allow from any to any port 80 proto udp"
+      "ufw allow from any to any port 51820 proto udp"
     ]
   }
 

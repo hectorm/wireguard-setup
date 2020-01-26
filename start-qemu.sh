@@ -29,6 +29,6 @@ kvm \
 	-smp 1 -m 512 \
 	-nographic -serial mon:stdio \
 	-device e1000,netdev=n0 \
-	-netdev user,id=n0,hostfwd=tcp::2222-:22,hostfwd=tcp::8080-:80 \
+	-netdev user,id=n0,hostfwd=tcp::2222-:22,hostfwd=udp::5353-:53 \
 	-drive file="${SNAPSHOT_DISK:?}",if=virtio,format=qcow2 \
 	-drive file="${USERDATA_DISK:?}",if=virtio,format=raw

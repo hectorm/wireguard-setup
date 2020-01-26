@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "meta-data": "yaml",
+    "user-data": "yaml"
+  }
+}

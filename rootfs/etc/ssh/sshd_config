@@ -1,0 +1,26 @@
+Protocol                        2
+HostKey                         /etc/ssh/ssh_host_ed25519_key
+HostKey                         /etc/ssh/ssh_host_rsa_key
+ListenAddress                   0.0.0.0
+Port                            22
+UseDNS                          no
+UsePAM                          yes
+X11Forwarding                   no
+AllowTcpForwarding              yes
+AllowGroups                     ssh-user
+PermitRootLogin                 without-password
+PermitEmptyPasswords            no
+PermitUserEnvironment           no
+PubkeyAuthentication            yes
+PasswordAuthentication          no
+ChallengeResponseAuthentication no
+GSSAPIAuthentication            no
+Subsystem                       sftp internal-sftp
+LoginGraceTime                  30
+TCPKeepAlive                    yes
+ClientAliveInterval             60
+ClientAliveCountMax             5
+PrintMotd                       yes
+PrintLastLog                    yes
+SyslogFacility                  AUTH
+LogLevel                        INFO

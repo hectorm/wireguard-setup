@@ -1,5 +1,5 @@
+**/dist/*
 **/packer_cache/*
-**/packer_output/*
 **/.terraform/*
 *.tfstate
 *.tfstate.*

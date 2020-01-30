@@ -1,0 +1,11 @@
+hcloud_api_token = ""
+
+wg_server_name = ""
+wg_server_type = ""
+wg_server_location = ""
+
+wg_server_ssh_publickey = ""
+wg_server_ssh_publickey_name = ""
+
+wg_server_own_privatekey = ""
+wg_server_peer_publickeys = []

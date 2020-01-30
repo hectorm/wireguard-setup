@@ -1,10 +1,13 @@
-**/dist/*
-**/packer_cache/*
-**/.terraform/*
+.terraform/
+
 *.tfstate
 *.tfstate.*
+
+terraform.tfvars
+
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
+
 crash.log

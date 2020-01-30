@@ -1,0 +1,6 @@
+packer_cache/
+dist/
+
+*.box
+
+crash.log

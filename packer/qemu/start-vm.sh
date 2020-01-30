@@ -7,7 +7,7 @@ SRC_DIR=$(dirname "$(readlink -f "$0")")
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "${TMP_DIR:?}"' EXIT
 
-CLOUDIMG_DISK=${SRC_DIR:?}/packer_output/wireguard.qcow2
+CLOUDIMG_DISK=${SRC_DIR:?}/dist/wireguard.qcow2
 SNAPSHOT_DISK=${TMP_DIR:?}/cloudinit-snapshot.qcow2
 USERDATA_DISK=${TMP_DIR:?}/cloudinit-seed.img
 USERDATA_YAML=${TMP_DIR:?}/user-data

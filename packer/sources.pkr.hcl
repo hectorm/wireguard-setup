@@ -1,9 +1,9 @@
 source "hcloud" "main" {
   image = "ubuntu-18.04"
+  server_name = "wireguard-{{timestamp}}"
   server_type = "cx11"
   location = "fsn1"
 
-  server_name = "wireguard-{{timestamp}}"
   snapshot_name = "wireguard-{{timestamp}}"
   snapshot_labels {
     service = "wireguard"
@@ -21,16 +21,16 @@ source "qemu" "main" {
   disk_image = true
 
   vm_name = "wireguard.qcow2"
-  http_directory = "{{template_dir}}/qemu/http/"
-  output_directory = "{{template_dir}}/qemu/dist/"
+  http_directory = "./qemu/http/"
+  output_directory = "./qemu/dist/"
 
   accelerator = "kvm"
   cpus = 1
   memory = 512
   headless = true
-  qemuargs {
-    qemuargs = ["-smbios", "type=1,serial=ds=nocloud-net;s=http://{{.HTTPIP}}:{{.HTTPPort}}/seed/"]
-  }
+  qemuargs = [
+    ["-smbios", "type=1,serial=ds=nocloud-net;s=http://{{.HTTPIP}}:{{.HTTPPort}}/seed/"]
+  ]
 
   net_device = "virtio-net"
 

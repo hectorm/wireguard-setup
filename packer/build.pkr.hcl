@@ -5,8 +5,8 @@ build {
 
   provisioner "file" {
     direction = "upload"
-    source = "./rootfs/"
-    destination = "/"
+    source = "./rootfs"
+    destination = "/tmp"
   }
 
   provisioner "shell" {
@@ -17,14 +17,11 @@ build {
     inline_shebang = "/bin/sh -eux"
     inline = [
       <<EOF
-        chmod 644 /etc/apt/apt.conf.d/20auto-upgrades
-        chmod 644 /etc/apt/apt.conf.d/50unattended-upgrades
-        chmod 644 /etc/fail2ban/jail.d/sshd.conf
-        chmod 644 /etc/ssh/sshd_config
-        chmod 644 /etc/unbound/unbound.conf
-        chmod 644 /etc/wireguard/client-sample.conf
-        chmod 644 /etc/wireguard/wg0-peers.conf
-        chmod 600 /etc/wireguard/wg0.conf
+        find /tmp/rootfs/ -type d -exec chmod 755 '{}' ';' -exec chown root:root '{}' ';'
+        find /tmp/rootfs/ -type f -exec chmod 644 '{}' ';' -exec chown root:root '{}' ';'
+        find /tmp/rootfs/ -type f -regex '.+/\(bin\|cron\..+\)/.+' -exec chmod 755 '{}' ';'
+        find /tmp/rootfs/ -mindepth 1 -maxdepth 1 -exec cp -rfla '{}' / ';'
+        rm -rf /tmp/rootfs/
       EOF
       ,
       <<EOF

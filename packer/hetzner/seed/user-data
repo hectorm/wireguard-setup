@@ -1,0 +1,7 @@
+#cloud-config
+
+ssh_pwauth: false
+disable_root: false
+
+runcmd:
+  - sed -i '/ssh_pwauth/d' /etc/cloud/cloud.cfg.d/*-hetznercloud.cfg

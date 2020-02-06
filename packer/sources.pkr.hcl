@@ -9,6 +9,8 @@ source "hcloud" "main" {
     service = "wireguard"
   }
 
+  user_data_file = "./hetzner/seed/user-data"
+
   ssh_port = "22"
   ssh_username = "root"
   ssh_timeout = "10m"

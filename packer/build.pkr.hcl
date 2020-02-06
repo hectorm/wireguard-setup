@@ -25,6 +25,11 @@ build {
       EOF
       ,
       <<EOF
+        timedatectl set-timezone UTC
+        localectl set-locale LANG=en_US.UTF-8
+      EOF
+      ,
+      <<EOF
         apt-get update
         apt-get dist-upgrade -yo DPkg::options::=--force-confold
       EOF

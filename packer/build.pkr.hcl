@@ -25,14 +25,30 @@ build {
       EOF
       ,
       <<EOF
-        printf 'deb http://ppa.launchpad.net/wireguard/wireguard/ubuntu/ bionic main\n' > /etc/apt/sources.list.d/wireguard.list
-        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E1B39B6EF6DDB96564797591AE33835F504A1A25
         apt-get update
-        apt-get upgrade -yo DPkg::options::=--force-confold
-        apt-get install -yo DPkg::options::=--force-confold dns-root-data fail2ban ufw unattended-upgrades unbound
-        apt-get install -yo DPkg::options::=--force-confold linux-headers-$(uname -r) openresolv wireguard
-        apt-get install -yo DPkg::options::=--force-confold htop iperf3 qrencode nano ssh-import-id
-        apt-get autoremove -y
+        apt-get dist-upgrade -yo DPkg::options::=--force-confold
+      EOF
+      ,
+      <<EOF
+        apt-get install -yo DPkg::options::=--force-confold \
+          dns-root-data \
+          fail2ban \
+          htop \
+          iperf3 \
+          linux-headers-"$(uname -r)" \
+          nano \
+          openresolv \
+          qrencode \
+          ssh-import-id \
+          ufw \
+          unattended-upgrades \
+          unbound
+      EOF
+      ,
+      <<EOF
+        printf 'deb http://ppa.launchpad.net/wireguard/wireguard/ubuntu/ $(lsb_release -cs) main\n' > /etc/apt/sources.list.d/wireguard.list
+        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E1B39B6EF6DDB96564797591AE33835F504A1A25
+        apt-get update && apt-get install -yo DPkg::options::=--force-confold wireguard
       EOF
       ,
       <<EOF
@@ -54,8 +70,8 @@ build {
       EOF
       ,
       <<EOF
-        groupadd -r ssh-user
-        usermod -aG ssh-user root
+        groupadd --system ssh-user
+        usermod --append --groups ssh-user root
         passwd -d root
       EOF
       ,

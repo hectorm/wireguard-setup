@@ -51,7 +51,7 @@ build {
       EOF
       ,
       <<EOF
-        printf 'deb http://ppa.launchpad.net/wireguard/wireguard/ubuntu/ $(lsb_release -cs) main\n' > /etc/apt/sources.list.d/wireguard.list
+        printf "deb http://ppa.launchpad.net/wireguard/wireguard/ubuntu/ $(lsb_release -cs) main\n" > /etc/apt/sources.list.d/wireguard.list
         apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E1B39B6EF6DDB96564797591AE33835F504A1A25
         apt-get update && apt-get install -yo DPkg::options::=--force-confold wireguard
       EOF

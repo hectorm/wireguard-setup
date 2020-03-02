@@ -65,7 +65,7 @@ build {
       ,
       <<EOF
         systemctl enable --now fail2ban.service ufw.service unattended-upgrades.service
-        systemctl enable --now wg-quick@wg0.service
+        systemctl enable wg-quick@wg0.service
       EOF
       ,
       <<EOF

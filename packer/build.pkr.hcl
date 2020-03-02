@@ -41,7 +41,7 @@ build {
           fail2ban \
           htop \
           iperf3 \
-          linux-headers-"$(uname -r)" \
+          linux-generic \
           nano \
           openresolv \
           qrencode \

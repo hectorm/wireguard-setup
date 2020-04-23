@@ -1,5 +1,5 @@
 source "hcloud" "main" {
-  image = "ubuntu-18.04"
+  image = "ubuntu-20.04"
   server_name = "wireguard-{{timestamp}}"
   server_type = "cx11"
   location = "fsn1"
@@ -17,8 +17,8 @@ source "hcloud" "main" {
 }
 
 source "qemu" "main" {
-  iso_url = "https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img"
-  iso_checksum_url = "https://cloud-images.ubuntu.com/bionic/current/SHA256SUMS"
+  iso_url = "https://cloud-images.ubuntu.com/daily/server/focal/current/focal-server-cloudimg-amd64.img"
+  iso_checksum_url = "https://cloud-images.ubuntu.com/daily/server/focal/current/SHA256SUMS"
   iso_checksum_type = "sha256"
   disk_image = true
 

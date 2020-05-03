@@ -32,11 +32,11 @@ build {
       ,
       <<EOF
         apt-get update
-        apt-get dist-upgrade -yo DPkg::options::=--force-confold
+        apt-get dist-upgrade -y
       EOF
       ,
       <<EOF
-        apt-get install -yo DPkg::options::=--force-confold \
+        apt-get install -y \
           dns-root-data \
           fail2ban \
           htop \

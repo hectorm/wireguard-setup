@@ -36,6 +36,8 @@ build {
       EOF
       ,
       <<EOF
+        apt-get purge -y \
+          snapd
         apt-get install -y \
           dns-root-data \
           fail2ban \
@@ -49,6 +51,7 @@ build {
           unattended-upgrades \
           unbound \
           wireguard
+        apt-get autoremove -y
       EOF
       ,
       <<EOF

@@ -5,7 +5,7 @@ source "hcloud" "main" {
   location = "fsn1"
 
   snapshot_name = "wireguard-{{timestamp}}"
-  snapshot_labels {
+  snapshot_labels = {
     service = "wireguard"
   }
 

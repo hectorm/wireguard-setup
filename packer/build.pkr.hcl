@@ -27,6 +27,7 @@ build {
       ,
       <<EOF
         systemctl daemon-reload
+      EOF
       ,
       <<EOF
         timedatectl set-timezone UTC

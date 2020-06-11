@@ -65,7 +65,8 @@ build {
       EOF
       ,
       <<EOF
-        systemctl enable --now fail2ban.service rng-tools.service ufw.service unattended-upgrades.service
+        systemctl enable --now fail2ban.service rng-tools.service ssh.service ufw.service
+        systemctl enable --now apt-daily-upgrade.timer apt-daily.timer unattended-upgrades.service
         systemctl enable wg-quick@wg0.service
       EOF
       ,

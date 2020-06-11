@@ -88,7 +88,10 @@ build {
         rm -f /etc/ssh/ssh_host_*key*
         rm -f /etc/wireguard/*-*key /etc/wireguard/*-iface
         find /var/lib/apt/lists/ -mindepth 1 -delete
-        find / -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -delete
+        find / -type f -regextype egrep \
+          -regex '.+\.(dpkg|ucf)-(old|new|dist)' \
+          -not -regex '/(dev|proc|sys|run)/.*' \
+          -delete
       EOF
     ]
   }

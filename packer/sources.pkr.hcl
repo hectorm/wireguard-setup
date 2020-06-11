@@ -18,8 +18,7 @@ source "hcloud" "main" {
 
 source "qemu" "main" {
   iso_url = "https://cloud-images.ubuntu.com/daily/server/focal/current/focal-server-cloudimg-amd64.img"
-  iso_checksum_url = "https://cloud-images.ubuntu.com/daily/server/focal/current/SHA256SUMS"
-  iso_checksum_type = "sha256"
+  iso_checksum = "file:https://cloud-images.ubuntu.com/daily/server/focal/current/SHA256SUMS"
   disk_image = true
 
   vm_name = "wireguard.qcow2"

@@ -26,6 +26,9 @@ build {
       EOF
       ,
       <<EOF
+        systemctl daemon-reload
+      ,
+      <<EOF
         timedatectl set-timezone UTC
         localectl set-locale LANG=en_US.UTF-8
       EOF

@@ -49,6 +49,7 @@ build {
           nano \
           openresolv \
           qrencode \
+          rng-tools \
           ssh-import-id \
           ufw \
           unattended-upgrades \
@@ -64,7 +65,7 @@ build {
       EOF
       ,
       <<EOF
-        systemctl enable --now fail2ban.service ufw.service unattended-upgrades.service
+        systemctl enable --now fail2ban.service rng-tools.service ufw.service unattended-upgrades.service
         systemctl enable wg-quick@wg0.service
       EOF
       ,

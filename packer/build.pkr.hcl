@@ -85,9 +85,8 @@ build {
       ,
       <<EOF
         rm -f /etc/ssh/ssh_host_*key*
-        rm -f /etc/wireguard/*-*key
-        rm -f /etc/wireguard/*-iface
-        rm -rf /var/lib/apt/lists/*
+        rm -f /etc/wireguard/*-*key /etc/wireguard/*-iface
+        find /var/lib/apt/lists/ -mindepth 1 -delete
       EOF
     ]
   }

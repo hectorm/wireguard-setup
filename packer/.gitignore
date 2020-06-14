@@ -1,5 +1,7 @@
 packer_cache/
-dist/
+qemu/dist/
+
+packer.auto.pkrvars.hcl
 
 *.box
 

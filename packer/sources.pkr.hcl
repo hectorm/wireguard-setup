@@ -1,4 +1,6 @@
 source "hcloud" "main" {
+  token = var.hcloud_api_token
+
   image = "ubuntu-20.04"
   server_name = "wireguard-{{timestamp}}"
   server_type = "cx11"

@@ -6,14 +6,19 @@
 
 ## Deployment instructions
 
- 1. Build the server image with Packer.
+ 1. Copy `./packer/packer.auto.pkrvars.hcl.sample` file to `./packer/packer.auto.pkrvars.hcl` and
+ fill it with the appropriate values.
+
+ 2. Build the server image with Packer.
  ```sh
  cd ./packer/
- export HCLOUD_TOKEN=XXXX
  packer build ./
  ```
 
- 2. Deploy the server image with Terraform.
+ 3. Copy `./terraform/terraform.tfvars.sample` file to `./terraform/terraform.tfvars` and fill it
+ with the appropriate values.
+
+ 4. Deploy the server image with Terraform.
  ```sh
  cd ./terraform/
  terraform init

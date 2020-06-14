@@ -44,15 +44,14 @@ build {
           snapd
         apt-get install -y \
           dns-root-data \
-          fail2ban \
           htop \
           iperf3 \
           nano \
+          nftables \
           openresolv \
           qrencode \
           rng-tools \
           ssh-import-id \
-          ufw \
           unattended-upgrades \
           unbound \
           wireguard
@@ -66,21 +65,14 @@ build {
       EOF
       ,
       <<EOF
-        systemctl enable --now fail2ban.service rng-tools.service ssh.service ufw.service
+        systemctl enable --now nftables.service rng-tools.service ssh.service
         systemctl enable --now apt-daily-upgrade.timer apt-daily.timer unattended-upgrades.service
         systemctl enable wg-quick@wg0.service
       EOF
       ,
       <<EOF
-        ufw --force enable
-        ufw default deny incoming
-        ufw default allow outgoing
-        ufw allow from any to any port 22 proto tcp
-      EOF
-      ,
-      <<EOF
-        groupadd --system ssh-user
-        usermod --append --groups ssh-user root
+        groupadd -r ssh-user
+        usermod -aG ssh-user root
         passwd -d root
       EOF
       ,
@@ -88,7 +80,7 @@ build {
         rm -f /etc/ssh/ssh_host_*key*
         rm -f /etc/wireguard/*-*key /etc/wireguard/*-iface
         find /var/lib/apt/lists/ -mindepth 1 -delete
-        find / -ignore_readdir_race -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -delete
+        find / -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -ignore_readdir_race -delete ||:
       EOF
     ]
   }

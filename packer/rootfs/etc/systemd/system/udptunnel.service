@@ -1,0 +1,30 @@
+[Unit]
+Description=udptunnel service
+Requires=udptunnel.socket
+ConditionPathExists=!/etc/udptunnel/udptunnel_not_to_be_run
+
+[Service]
+Type=notify
+Restart=on-failure
+ExecStart=/usr/local/bin/udptunnel --server --verbose 127.0.0.1:51820
+StandardOutput=journal
+StandardError=journal
+DynamicUser=yes
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+RestrictRealtime=yes
+RemoveIPC=yes
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target

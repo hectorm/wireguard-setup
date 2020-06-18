@@ -43,12 +43,16 @@ build {
         apt-get purge -y \
           snapd
         apt-get install -y \
+          build-essential \
           dns-root-data \
+          git \
           htop \
           iperf3 \
+          libsystemd-dev \
           nano \
           nftables \
           openresolv \
+          pkgconf \
           qrencode \
           rng-tools \
           ssh-import-id \
@@ -56,6 +60,14 @@ build {
           unbound \
           wireguard
         apt-get autoremove -y
+      EOF
+      ,
+      <<EOF
+        mkdir /usr/local/src/udptunnel/ && cd /usr/local/src/udptunnel/
+        git clone 'https://github.com/hectorm/udptunnel.git' ./
+        git checkout '2e32c0db162c6bfb61031c90d23ad941bf65797f'
+        PREFIX=/usr/local ./udptunnel-installer.sh
+        udptunnel --help
       EOF
       ,
       <<EOF
@@ -67,7 +79,7 @@ build {
       <<EOF
         systemctl enable --now nftables.service rng-tools.service ssh.service
         systemctl enable --now apt-daily-upgrade.timer apt-daily.timer unattended-upgrades.service
-        systemctl enable wg-quick@wg0.service
+        systemctl enable udptunnel.service wg-quick@wg0.service
       EOF
       ,
       <<EOF

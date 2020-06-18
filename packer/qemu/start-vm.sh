@@ -24,11 +24,19 @@ cloud-localds "${USERDATA_DISK:?}" "${USERDATA_YAML:?}"
 ssh-keygen -R '[127.0.0.1]:1122'
 ssh-keygen -R '[localhost]:1122'
 
+# hostfwd helper
+hostfwd() { printf ',hostfwd=%s::%s-:%s' "$@"; }
+
 # Launch VM
 kvm \
 	-smp 1 -m 512 \
 	-nographic -serial mon:stdio \
 	-device e1000,netdev=n0 \
-	-netdev user,id=n0,hostfwd=tcp::1122-:122,hostfwd=udp::51820-:51820 \
+	-netdev user,id=n0"$(hostfwd \
+		tcp 1122    122 \
+		udp 51820 51820 \
+		udp 1053     53 \
+		tcp 1443    443 \
+	)" \
 	-drive file="${SNAPSHOT_DISK:?}",if=virtio,format=qcow2 \
 	-drive file="${USERDATA_DISK:?}",if=virtio,format=raw

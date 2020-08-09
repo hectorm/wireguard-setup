@@ -85,7 +85,7 @@ build {
       <<EOF
         groupadd -r ssh-user
         usermod -aG ssh-user root
-        passwd -d root
+        usermod -p '*' root
       EOF
       ,
       <<EOF

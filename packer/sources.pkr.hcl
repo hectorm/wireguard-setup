@@ -18,6 +18,26 @@ source "hcloud" "main" {
   ssh_timeout = "10m"
 }
 
+source "digitalocean" "main" {
+  api_token = var.digitalocean_api_token
+
+  image = "ubuntu-20-04-x64"
+  droplet_name = "wireguard-{{timestamp}}"
+  size = "s-1vcpu-1gb"
+  region = "fra1"
+
+  snapshot_name = "wireguard-{{timestamp}}"
+  tags = [
+    "wireguard"
+  ]
+
+  user_data_file = "./digitalocean/seed/user-data"
+
+  ssh_port = "22"
+  ssh_username = "root"
+  ssh_timeout = "10m"
+}
+
 source "qemu" "main" {
   iso_url = "https://cloud-images.ubuntu.com/daily/server/focal/current/focal-server-cloudimg-amd64.img"
   iso_checksum = "file:https://cloud-images.ubuntu.com/daily/server/focal/current/SHA256SUMS"

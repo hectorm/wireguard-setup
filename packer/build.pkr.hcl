@@ -40,8 +40,6 @@ build {
       EOF
       ,
       <<EOF
-        apt-get purge -y \
-          snapd
         apt-get install -y \
           build-essential \
           dns-root-data \
@@ -59,6 +57,11 @@ build {
           unattended-upgrades \
           unbound \
           wireguard
+      EOF
+      ,
+      <<EOF
+        apt-get purge -y \
+          snapd
         apt-get autoremove -y
       EOF
       ,

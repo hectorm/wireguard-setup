@@ -19,6 +19,7 @@ build {
     inline_shebang = "/bin/sh -eux"
     inline = [
       <<EOF
+        find /tmp/rootfs/ -type f -name .gitkeep -delete
         find /tmp/rootfs/ -type d -exec chmod 755 '{}' ';' -exec chown root:root '{}' ';'
         find /tmp/rootfs/ -type f -exec chmod 644 '{}' ';' -exec chown root:root '{}' ';'
         find /tmp/rootfs/ -type f -regex '.+/\(bin\|cron\..+\)/.+' -exec chmod 755 '{}' ';'

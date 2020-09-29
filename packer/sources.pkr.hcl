@@ -16,6 +16,7 @@ source "hcloud" "main" {
   ssh_port = "22"
   ssh_username = "root"
   ssh_timeout = "10m"
+  ssh_clear_authorized_keys = true
 }
 
 source "digitalocean" "main" {
@@ -36,6 +37,7 @@ source "digitalocean" "main" {
   ssh_port = "22"
   ssh_username = "root"
   ssh_timeout = "10m"
+  ssh_clear_authorized_keys = true
 }
 
 source "qemu" "main" {
@@ -66,6 +68,7 @@ source "qemu" "main" {
   ssh_username = "root"
   ssh_password = "toor"
   ssh_timeout = "10m"
+  ssh_clear_authorized_keys = true
 
   shutdown_command = "shutdown -P now"
 }

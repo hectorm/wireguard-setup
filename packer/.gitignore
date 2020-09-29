@@ -1,5 +1,5 @@
 packer_cache/
-qemu/dist/
+dist/
 
 packer.auto.pkrvars.hcl
 

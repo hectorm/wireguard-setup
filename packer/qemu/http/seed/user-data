@@ -5,5 +5,5 @@ disable_root: false
 chpasswd: { list: ["root:toor"], expire: false }
 
 runcmd:
-  - printf '%s\n' 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+  - sed -ni '/^PermitRootLogin\s/!p;$aPermitRootLogin yes' /etc/ssh/sshd_config
   - systemctl restart ssh.service

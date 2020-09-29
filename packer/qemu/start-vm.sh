@@ -3,26 +3,28 @@
 set -eu
 export LC_ALL=C
 
-SRC_DIR=$(dirname "$(readlink -f "$0")")
+SRC_DIR=$(dirname "$(dirname "$(readlink -f "$0")")")
 TMP_DIR=$(mktemp -d)
-trap 'rm -rf "${TMP_DIR:?}"' EXIT
 
-CLOUDIMG_DISK=${SRC_DIR:?}/dist/wireguard.qcow2
-SNAPSHOT_DISK=${TMP_DIR:?}/cloudinit-snapshot.qcow2
-USERDATA_DISK=${TMP_DIR:?}/cloudinit-seed.img
-USERDATA_YAML=${TMP_DIR:?}/user-data
+ORIGINAL_DISK=${SRC_DIR:?}/dist/qemu/wireguard.qcow2
+SNAPSHOT_DISK=${TMP_DIR:?}/snapshot.qcow2
 
-# Create a snapshot image to preserve the original cloud-image
-qemu-img create -b "${CLOUDIMG_DISK:?}" -f qcow2 "${SNAPSHOT_DISK:?}"
+USERDATA_DISK=${TMP_DIR:?}/seed.img
+USERDATA_YAML=${SRC_DIR:?}/qemu/http/seed/user-data
+
+# Remove temporary files on exit
+trap 'rm -rf "${TMP_DIR:?}"; trap - EXIT; exit 0' EXIT TERM INT HUP
+
+# Create a snapshot image to preserve the original image
+qemu-img create -b "${ORIGINAL_DISK:?}" -f qcow2 "${SNAPSHOT_DISK:?}"
 qemu-img resize "${SNAPSHOT_DISK:?}" +2G
 
 # Create a seed image with metadata using cloud-localds
-printf '%s\n' '#cloud-config' 'runcmd: ["ssh-import-id gh:hectorm"]' > "${USERDATA_YAML:?}"
 cloud-localds "${USERDATA_DISK:?}" "${USERDATA_YAML:?}"
 
 # Remove keys from the known_hosts file
-ssh-keygen -R '[127.0.0.1]:1122'
-ssh-keygen -R '[localhost]:1122'
+ssh-keygen -R '[127.0.0.1]:1122' 2>/dev/null
+ssh-keygen -R '[localhost]:1122' 2>/dev/null
 
 # hostfwd helper
 hostfwd() { printf ',hostfwd=%s::%s-:%s' "$@"; }

@@ -1,6 +1,8 @@
 build {
   sources = [
-    "source.hcloud.main"
+    "source.hcloud.main",
+    "source.digitalocean.main",
+    "source.qemu.main"
   ]
 
   provisioner "file" {

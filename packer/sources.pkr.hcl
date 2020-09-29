@@ -45,7 +45,7 @@ source "qemu" "main" {
 
   vm_name = "wireguard.qcow2"
   http_directory = "./qemu/http/"
-  output_directory = "./qemu/dist/"
+  output_directory = "./dist/qemu/"
 
   accelerator = "kvm"
   cpus = 1

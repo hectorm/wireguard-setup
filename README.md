@@ -12,7 +12,7 @@
  2. Build the server image with Packer.
  ```sh
  cd ./packer/
- packer build ./
+ packer build -only=hcloud.main ./
  ```
 
  3. Copy `./terraform/terraform.tfvars.sample` file to `./terraform/terraform.tfvars` and fill it

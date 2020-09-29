@@ -9,8 +9,8 @@ TMP_DIR=$(mktemp -d)
 ORIGINAL_DISK=${SRC_DIR:?}/dist/qemu/wireguard.qcow2
 SNAPSHOT_DISK=${TMP_DIR:?}/snapshot.qcow2
 
-USERDATA_DISK=${TMP_DIR:?}/seed.img
 USERDATA_YAML=${SRC_DIR:?}/qemu/http/seed/user-data
+USERDATA_DISK=${TMP_DIR:?}/seed.img
 
 # Remove temporary files on exit
 trap 'rm -rf "${TMP_DIR:?}"; trap - EXIT; exit 0' EXIT TERM INT HUP

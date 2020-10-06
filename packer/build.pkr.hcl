@@ -43,13 +43,15 @@ build {
       EOF
       ,
       <<EOF
-        apt-get install -y \
-          build-essential \
+        apt-get install -y --no-install-recommends \
+          ca-certificates \
           dns-root-data \
+          gcc \
           git \
           htop \
-          iperf3 \
+          libc6-dev \
           libsystemd-dev \
+          make \
           nano \
           nftables \
           openresolv \
@@ -64,6 +66,8 @@ build {
       ,
       <<EOF
         apt-get purge -y \
+          accountsservice \
+          packagekit \
           snapd
         apt-get autoremove -y
       EOF

@@ -33,7 +33,7 @@ $(PACKER_HCLOUD_OUT):
 	'$(PACKER)' build -force -only=hcloud.main '$(PACKER_WORK_DIR)' 2>&1 | tee '$(PACKER_HCLOUD_OUT)'
 
 .PHONY: build-digitalocean
-build-hcloud: $(PACKER_DIGITALOCEAN_OUT)
+build-digitalocean: $(PACKER_DIGITALOCEAN_OUT)
 
 $(PACKER_DIGITALOCEAN_OUT):
 	mkdir -p '$(dir $(PACKER_DIGITALOCEAN_OUT))'

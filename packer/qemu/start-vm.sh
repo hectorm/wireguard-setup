@@ -30,8 +30,8 @@ ssh-keygen -R '[localhost]:1122' 2>/dev/null
 hostfwd() { printf ',hostfwd=%s::%s-:%s' "$@"; }
 
 # Launch VM
-kvm \
-	-smp 1 -m 512 \
+qemu-system-x86_64 \
+	-enable-kvm -smp 1 -m 512 \
 	-nographic -serial mon:stdio \
 	-device e1000,netdev=n0 \
 	-netdev user,id=n0"$(hostfwd \

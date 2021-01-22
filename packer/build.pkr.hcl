@@ -76,7 +76,7 @@ build {
       <<EOF
         mkdir /usr/local/src/udptunnel/ && cd /usr/local/src/udptunnel/
         git clone 'https://github.com/hectorm/udptunnel.git' ./
-        git checkout '2e32c0db162c6bfb61031c90d23ad941bf65797f'
+        git checkout '13578016f47b2f02e85c5ab4aa92e820e1f25f79'
         PREFIX=/usr/local ./udptunnel-installer.sh
         udptunnel --help
       EOF

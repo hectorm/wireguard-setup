@@ -51,6 +51,7 @@ build {
           htop \
           libc6-dev \
           libsystemd-dev \
+          linux-virtual-hwe-20.04 \
           make \
           nano \
           nftables \

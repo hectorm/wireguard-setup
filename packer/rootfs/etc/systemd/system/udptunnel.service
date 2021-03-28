@@ -5,7 +5,7 @@ ConditionPathExists=!/etc/udptunnel/udptunnel_not_to_be_run
 
 [Service]
 Type=notify
-Restart=on-failure
+Restart=always
 ExecStart=/usr/local/bin/udptunnel --server --verbose 127.0.0.1:51820
 StandardOutput=journal
 StandardError=journal

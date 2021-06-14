@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    hcloud = {
+      source = "hetznercloud/hcloud"
+      version = "~> 1.26.2"
+    }
+  }
+}
+
 provider "hcloud" {
   token = var.hcloud_api_token
 }

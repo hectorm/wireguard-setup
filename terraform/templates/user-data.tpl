@@ -5,12 +5,12 @@ write_files:
     owner: "root:root"
     permissions: "0600"
     content: |
-      ${wg_server_own_privatekey}
+      ${wg_server_wg_privatekey}
   - path: "/etc/wireguard/wg0-peers.conf"
     owner: "root:root"
     permissions: "0644"
     content: |
-      %{~ for index, pubkey in wg_server_peer_publickeys ~}
+      %{~ for index, pubkey in wg_server_wg_peer_publickeys ~}
       [Peer]
       PublicKey = ${pubkey}
       AllowedIPs = 10.10.10.${index+2}/32, fd10:10:10::${index+2}/128

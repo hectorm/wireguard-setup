@@ -32,12 +32,12 @@ variable "wg_server_ssh_publickey_name" {
   description = "SSH public key name"
 }
 
-variable "wg_server_own_privatekey" {
+variable "wg_server_wg_privatekey" {
   type        = string
   description = "WireGuard private key"
 }
 
-variable "wg_server_peer_publickeys" {
+variable "wg_server_wg_peer_publickeys" {
   type        = list(string)
   description = "WireGuard peer public keys"
 }

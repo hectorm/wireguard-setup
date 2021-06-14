@@ -24,7 +24,7 @@ resource "hcloud_server" "wg_server" {
     hcloud_ssh_key.wg_server_ssh_key.id
   ]
   user_data = templatefile("${path.module}/templates/user-data.tpl", {
-    wg_server_own_privatekey  = var.wg_server_own_privatekey
-    wg_server_peer_publickeys = var.wg_server_peer_publickeys
+    wg_server_wg_privatekey      = var.wg_server_wg_privatekey
+    wg_server_wg_peer_publickeys = var.wg_server_wg_peer_publickeys
   })
 }

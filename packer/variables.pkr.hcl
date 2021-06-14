@@ -1,11 +1,11 @@
 variable "hcloud_api_token" {
-  type = string
+  type        = string
   description = "Hetzner Cloud API token"
-  default = ""
+  default     = ""
 }
 
 variable "digitalocean_api_token" {
-  type = string
+  type        = string
   description = "DigitalOcean API token"
-  default = ""
+  default     = ""
 }

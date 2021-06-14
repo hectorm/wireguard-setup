@@ -6,8 +6,8 @@ build {
   ]
 
   provisioner "file" {
-    direction = "upload"
-    source = "./rootfs"
+    direction   = "upload"
+    source      = "./rootfs"
     destination = "/tmp"
   }
 

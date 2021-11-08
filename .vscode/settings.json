@@ -1,5 +1,11 @@
 {
   "files.associations": {
+    "*.hcl": "terraform",
+    "*.hcl.sample": "terraform",
+    "*.tf": "terraform",
+    "*.tf.sample": "terraform",
+    "*.tfvars": "terraform",
+    "*.tfvars.sample": "terraform",
     "meta-data": "yaml",
     "user-data": "yaml"
   }

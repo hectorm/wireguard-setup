@@ -17,7 +17,7 @@ USERDATA_DISK=${TMP_DIR:?}/seed.img
 trap 'ret="$?"; rm -rf -- "${TMP_DIR:?}"; trap - EXIT; exit "${ret:?}"' EXIT TERM INT HUP
 
 # Create a snapshot image to preserve the original image
-qemu-img create -b "${ORIGINAL_DISK:?}" -f qcow2 "${SNAPSHOT_DISK:?}"
+qemu-img create -f qcow2 -b "${ORIGINAL_DISK:?}" -F qcow2 "${SNAPSHOT_DISK:?}"
 qemu-img resize "${SNAPSHOT_DISK:?}" +2G
 
 # Create a seed image with metadata using cloud-localds
@@ -32,7 +32,7 @@ hostfwd() { printf ',hostfwd=%s::%s-:%s' "$@"; }
 
 # Launch VM
 qemu-system-x86_64 \
-	-enable-kvm -smp 1 -m 512 \
+	-accel kvm -cpu host -smp 1 -m 512 \
 	-nographic -serial mon:stdio \
 	-device e1000,netdev=n0 \
 	-netdev user,id=n0"$(hostfwd \

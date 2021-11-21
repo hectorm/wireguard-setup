@@ -22,22 +22,30 @@ variable "wg_server_location" {
   default     = "fsn1"
 }
 
-variable "wg_server_ssh_publickey" {
-  type        = string
-  description = "SSH public key"
-}
-
-variable "wg_server_ssh_publickey_name" {
-  type        = string
-  description = "SSH public key name"
-}
-
 variable "wg_server_wg_privatekey" {
   type        = string
   description = "WireGuard private key"
+  default     = ""
 }
 
 variable "wg_server_wg_peer_publickeys" {
   type        = list(string)
   description = "WireGuard peer public keys"
+  default     = []
+}
+
+variable "wg_firewall_name" {
+  type        = string
+  description = "Firewall name"
+  default     = "wireguard"
+}
+
+variable "wg_ssh_publickey" {
+  type        = string
+  description = "SSH public key"
+}
+
+variable "wg_ssh_publickey_name" {
+  type        = string
+  description = "SSH public key name"
 }

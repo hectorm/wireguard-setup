@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     hcloud = {
-      source = "hetznercloud/hcloud"
+      source  = "hetznercloud/hcloud"
       version = "~> 1.32.1"
     }
   }
@@ -68,7 +68,7 @@ resource "hcloud_server" "wg_server" {
   labels       = { service = "wireguard" }
   firewall_ids = [hcloud_firewall.wg_firewall.id]
   ssh_keys     = [hcloud_ssh_key.wg_ssh_key.id]
-  user_data    = templatefile("${path.module}/templates/user-data.tpl", {
+  user_data = templatefile("${path.module}/templates/user-data.tpl", {
     wg_server_wg_privatekey      = var.wg_server_wg_privatekey
     wg_server_wg_peer_publickeys = var.wg_server_wg_peer_publickeys
   })

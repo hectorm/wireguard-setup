@@ -1,0 +1,77 @@
+name: 'CI'
+
+on:
+  push:
+    tags: ['*']
+    branches: ['*']
+  pull_request:
+    branches: ['*']
+  schedule:
+    - cron: '20 04 1,15 * *'
+  workflow_dispatch:
+
+jobs:
+
+  validate-packer:
+    name: 'Validate Packer configuration'
+    runs-on: 'ubuntu-20.04'
+    defaults:
+      run:
+        working-directory: './packer/'
+    steps:
+      - name: 'Checkout project'
+        uses: 'actions/checkout@v3'
+      - name: 'Install dependencies'
+        run: |
+          curl -fsSL 'https://apt.releases.hashicorp.com/gpg' | sudo apt-key add -
+          sudo apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends packer
+      - name: 'Validate configuration'
+        run: |
+          packer validate ./
+      - name: 'Check configuration format'
+        run: |
+          packer fmt -check -diff ./
+
+  validate-terraform:
+    name: 'Validate Terraform configuration'
+    runs-on: 'ubuntu-20.04'
+    defaults:
+      run:
+        working-directory: './terraform/'
+    steps:
+      - name: 'Checkout project'
+        uses: 'actions/checkout@v3'
+      - name: 'Install dependencies'
+        run: |
+          curl -fsSL 'https://apt.releases.hashicorp.com/gpg' | sudo apt-key add -
+          sudo apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends terraform
+      - name: 'Init Terraform'
+        run: |
+          terraform init
+      - name: 'Validate configuration'
+        run: |
+          terraform validate ./
+      - name: 'Check configuration format'
+        run: |
+          terraform fmt -check -diff ./
+
+  build-packer:
+    name: 'Build Packer image'
+    needs: ['validate-packer']
+    runs-on: 'ubuntu-20.04'
+    defaults:
+      run:
+        working-directory: './packer/'
+    steps:
+      - name: 'Checkout project'
+        uses: 'actions/checkout@v3'
+      - name: 'Install dependencies'
+        run: |
+          curl -fsSL 'https://apt.releases.hashicorp.com/gpg' | sudo apt-key add -
+          sudo apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends packer qemu-utils qemu-system-x86
+      - name: 'Build image'
+        run: |
+          make build-qemu PACKER_LOG=1 PKR_VAR_qemu_accelerator=none

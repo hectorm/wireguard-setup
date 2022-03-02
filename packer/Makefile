@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 SHELL := /bin/sh
-.SHELLFLAGS := -eu -c
+.SHELLFLAGS := -euc
 
 PACKER := $(shell command -v packer 2>/dev/null)
 

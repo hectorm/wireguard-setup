@@ -9,3 +9,9 @@ variable "digitalocean_api_token" {
   description = "DigitalOcean API token"
   default     = "xxxx"
 }
+
+variable "qemu_accelerator" {
+  type        = string
+  description = "The accelerator type to use when running the VM"
+  default     = "kvm"
+}

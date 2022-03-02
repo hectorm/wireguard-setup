@@ -49,7 +49,7 @@ source "qemu" "main" {
   http_directory   = "./qemu/http/"
   output_directory = "./dist/qemu/"
 
-  accelerator = "kvm"
+  accelerator = var.qemu_accelerator
   cpus        = 1
   memory      = 512
   headless    = true

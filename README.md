@@ -12,6 +12,7 @@
  2. Build the server image with Packer.
  ```sh
  cd ./packer/
+ packer init ./
  packer build -only=hcloud.main ./
  ```
 

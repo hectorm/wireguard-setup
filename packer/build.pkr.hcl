@@ -39,7 +39,7 @@ build {
       ,
       <<EOF
         apt-get update
-        apt-get dist-upgrade -y
+        apt-get dist-upgrade -o DPkg::Lock::Timeout=300 -y
       EOF
       ,
       <<EOF
@@ -51,14 +51,13 @@ build {
           htop \
           libc6-dev \
           libsystemd-dev \
-          linux-virtual-hwe-20.04 \
           make \
           nano \
           nftables \
           openresolv \
           pkgconf \
           qrencode \
-          rng-tools \
+          rng-tools5 \
           ssh-import-id \
           unattended-upgrades \
           unbound \
@@ -67,8 +66,7 @@ build {
       ,
       <<EOF
         apt-get purge -y \
-          accountsservice \
-          packagekit \
+          lxd-agent-loader \
           snapd
         apt-get autoremove -y
       EOF
@@ -88,7 +86,7 @@ build {
       EOF
       ,
       <<EOF
-        systemctl enable --now nftables.service rng-tools.service ssh.service
+        systemctl enable --now nftables.service rngd.service ssh.service
         systemctl enable --now apt-daily-upgrade.timer apt-daily.timer unattended-upgrades.service
         systemctl enable udptunnel.service wg-quick@wg0.service
       EOF
@@ -100,10 +98,11 @@ build {
       EOF
       ,
       <<EOF
-        rm -f /etc/ssh/ssh_host_*key*
-        rm -f /etc/wireguard/*-*key /etc/wireguard/*-iface
-        find /var/lib/apt/lists/ -mindepth 1 -delete
-        find / -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -ignore_readdir_race -delete ||:
+        rm -rf /etc/ssh/ssh_host_*key* /root/.ssh/ /etc/wireguard/*-*key /etc/wireguard/*-iface /root/snap/
+        find /tmp/ /var/tmp/ /var/lib/apt/lists/ -ignore_readdir_race -mindepth 1 -delete ||:
+        find / -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -delete ||:
+        journalctl --rotate && journalctl --vacuum-time=1s
+        cloud-init clean --logs
       EOF
     ]
   }

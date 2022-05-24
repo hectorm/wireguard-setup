@@ -1,9 +1,11 @@
 #cloud-config
 
-ssh_pwauth: true
 disable_root: false
-chpasswd: { list: ["root:toor"], expire: false }
+chpasswd: { list: ['root:toor'], expire: false }
 
 runcmd:
-  - sed -ni '/^PermitRootLogin\s/!p;$aPermitRootLogin yes' /etc/ssh/sshd_config
-  - systemctl restart ssh.service
+  - ['/usr/bin/cp', '-a', '/etc/ssh/sshd_config', '/etc/ssh/sshd_config_orig']
+  - ['/usr/bin/sed', '-ni', '/^PermitRootLogin[[:blank:]]/!p;$aPermitRootLogin yes', '/etc/ssh/sshd_config']
+  - ['/usr/bin/sed', '-ni', '/^PasswordAuthentication[[:blank:]]/!p;$aPasswordAuthentication yes', '/etc/ssh/sshd_config']
+  - ['/usr/bin/systemctl', 'restart', 'ssh.service']
+  - ['/usr/bin/mv', '-f', '/etc/ssh/sshd_config_orig', '/etc/ssh/sshd_config']

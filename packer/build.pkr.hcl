@@ -105,6 +105,7 @@ build {
         find / -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -delete ||:
         journalctl --rotate && journalctl --vacuum-time=1s
         cloud-init clean --logs
+        > /etc/machine-id && ln -sf /etc/machine-id /var/lib/dbus/machine-id
       EOF
     ]
   }

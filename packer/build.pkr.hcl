@@ -67,7 +67,8 @@ build {
       <<EOF
         apt-get purge -y \
           lxd-agent-loader \
-          snapd
+          snapd \
+          ufw
         apt-get autoremove -y
       EOF
       ,
@@ -86,6 +87,7 @@ build {
       EOF
       ,
       <<EOF
+        systemctl mask snapd.service ufw.service
         systemctl enable --now nftables.service rngd.service ssh.service
         systemctl enable --now apt-daily-upgrade.timer apt-daily.timer unattended-upgrades.service
         systemctl enable udptunnel.service wg-quick@wg0.service

@@ -57,7 +57,6 @@ build {
           openresolv \
           pkgconf \
           qrencode \
-          rng-tools5 \
           ssh-import-id \
           unattended-upgrades \
           unbound \
@@ -88,7 +87,7 @@ build {
       ,
       <<EOF
         systemctl mask snapd.service ufw.service
-        systemctl enable --now nftables.service rngd.service ssh.service
+        systemctl enable --now nftables.service ssh.service
         systemctl enable --now apt-daily-upgrade.timer apt-daily.timer unattended-upgrades.service
         systemctl enable udptunnel.service wg-quick@wg0.service
       EOF

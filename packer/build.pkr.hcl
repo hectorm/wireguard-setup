@@ -80,7 +80,7 @@ build {
       EOF
       ,
       <<EOF
-        systemctl disable --now systemd-resolved.service
+        systemctl mask --now systemd-resolved.service
         unlink /etc/resolv.conf && printf 'nameserver 127.0.0.1\n' > /etc/resolv.conf
         systemctl enable --now unbound.service unbound-resolvconf.service
       EOF

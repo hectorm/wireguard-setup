@@ -98,7 +98,7 @@ build {
       EOF
       ,
       <<EOF
-        rm -rf /etc/ssh/ssh_host_*key* /root/.ssh/ /etc/wireguard/*-*key /etc/wireguard/*-iface /root/snap/
+        rm -rf /etc/ssh/ssh_host_*key* /root/.ssh/ /etc/wireguard/*-*key /root/snap/
         find /tmp/ /var/tmp/ /var/lib/apt/lists/ -ignore_readdir_race -mindepth 1 -delete ||:
         find / -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -delete ||:
         journalctl --rotate && journalctl --vacuum-time=1s

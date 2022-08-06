@@ -43,6 +43,7 @@ build {
       # Install packages
       <<EOF
         apt-get install -y --no-install-recommends \
+          apt-utils \
           ca-certificates \
           dns-root-data \
           gcc \

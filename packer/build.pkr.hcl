@@ -18,6 +18,7 @@ build {
     ]
     inline_shebang = "/bin/sh -eux"
     inline = [
+       # Set permissions and move files to "/"
       <<EOF
         find /tmp/rootfs/ -type f -name .gitkeep -delete
         find /tmp/rootfs/ -type d -exec chmod 755 '{}' ';' -exec chown root:root '{}' ';'
@@ -28,15 +29,18 @@ build {
         rm -rf /tmp/rootfs/
       EOF
       ,
+      # Reload systemd manager configuration
       <<EOF
         systemctl daemon-reload
       EOF
       ,
+      # Upgrade system
       <<EOF
         apt-get update
         apt-get dist-upgrade -o DPkg::Lock::Timeout=300 -y
       EOF
       ,
+      # Install packages
       <<EOF
         apt-get install -y --no-install-recommends \
           ca-certificates \
@@ -59,6 +63,7 @@ build {
           wireguard
       EOF
       ,
+      # Remove packages
       <<EOF
         apt-get purge -y \
           lxd-agent-loader \
@@ -67,11 +72,20 @@ build {
         apt-get autoremove -y
       EOF
       ,
+      # Set timezone and locale
       <<EOF
         timedatectl set-timezone UTC
         localectl set-locale LANG=en_US.UTF-8
       EOF
       ,
+      # Replace systemd-resolved with Unbound
+      <<EOF
+        systemctl mask --now systemd-resolved.service
+        unlink /etc/resolv.conf && printf 'nameserver 127.0.0.1\n' > /etc/resolv.conf
+        systemctl enable --now unbound.service unbound-resolvconf.service
+      EOF
+      ,
+      # Build and install udptunnel
       <<EOF
         mkdir /usr/local/src/udptunnel/ && cd /usr/local/src/udptunnel/
         git clone 'https://github.com/hectorm/udptunnel.git' ./
@@ -80,25 +94,33 @@ build {
         udptunnel --help
       EOF
       ,
+      # Setup services and timers
       <<EOF
-        systemctl mask --now systemd-resolved.service
-        unlink /etc/resolv.conf && printf 'nameserver 127.0.0.1\n' > /etc/resolv.conf
-        systemctl enable --now unbound.service unbound-resolvconf.service
+        systemctl enable \
+          apt-daily-upgrade.timer \
+          apt-daily.timer \
+          nftables.service \
+          ssh.service \
+          udptunnel.service \
+          unattended-upgrades.service \
+          wg-quick@wg0.service
+        systemctl mask \
+          snapd.service \
+          ufw.service
       EOF
       ,
-      <<EOF
-        systemctl mask snapd.service ufw.service
-        systemctl enable --now nftables.service ssh.service
-        systemctl enable --now apt-daily-upgrade.timer apt-daily.timer unattended-upgrades.service
-        systemctl enable udptunnel.service wg-quick@wg0.service
-      EOF
-      ,
+      # Create "ssh-user" group
       <<EOF
         groupadd -r ssh-user
         usermod -aG ssh-user root
+      EOF
+      ,
+      # Delete "root" user password
+      <<EOF
         usermod -p '*' root
       EOF
       ,
+      # Cleanup
       <<EOF
         # Remove SSH keys
         rm -rf /etc/ssh/ssh_host_*key* /root/.ssh/

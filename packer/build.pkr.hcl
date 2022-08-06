@@ -33,11 +33,6 @@ build {
       EOF
       ,
       <<EOF
-        timedatectl set-timezone UTC
-        localectl set-locale LANG=en_US.UTF-8
-      EOF
-      ,
-      <<EOF
         apt-get update
         apt-get dist-upgrade -o DPkg::Lock::Timeout=300 -y
       EOF
@@ -51,6 +46,7 @@ build {
           htop \
           libc6-dev \
           libsystemd-dev \
+          locales \
           make \
           nano \
           nftables \
@@ -69,6 +65,11 @@ build {
           snapd \
           ufw
         apt-get autoremove -y
+      EOF
+      ,
+      <<EOF
+        timedatectl set-timezone UTC
+        localectl set-locale LANG=en_US.UTF-8
       EOF
       ,
       <<EOF

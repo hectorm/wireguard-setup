@@ -43,6 +43,9 @@ build {
       # Install packages
       <<EOF
         apt-get install -y --no-install-recommends \
+          apparmor \
+          apparmor-profiles \
+          apparmor-utils \
           apt-utils \
           ca-certificates \
           dns-root-data \
@@ -98,6 +101,7 @@ build {
       # Setup services and timers
       <<EOF
         systemctl enable \
+          apparmor.service \
           apt-daily-upgrade.timer \
           apt-daily.timer \
           nftables.service \

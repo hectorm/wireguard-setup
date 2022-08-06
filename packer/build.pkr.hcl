@@ -100,12 +100,26 @@ build {
       EOF
       ,
       <<EOF
-        rm -rf /etc/ssh/ssh_host_*key* /root/.ssh/ /etc/wireguard/*-*key /root/snap/
-        find /tmp/ /var/tmp/ /var/lib/apt/lists/ -ignore_readdir_race -mindepth 1 -delete ||:
+        # Remove SSH keys
+        rm -rf /etc/ssh/ssh_host_*key* /root/.ssh/
+        # Remove WireGuard keys
+        rm -rf /etc/wireguard/*-*key
+        # Remove APT cache
+        find /var/lib/apt/lists/ -mindepth 1 -delete
+        # Remove APT backup files
         find / -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -delete ||:
-        journalctl --rotate && journalctl --vacuum-time=1s
+        # Remove snap directories
+        for d in /root/snap/ /home/*/snap/; do rm -rf "$d"; done
+        # Remove cloud-init artifacts
         cloud-init clean --logs
-        > /etc/machine-id && ln -sf /etc/machine-id /var/lib/dbus/machine-id
+        # Remove systemd journal logs
+        journalctl --rotate && journalctl --vacuum-time=1s
+        # Empty log files
+        find /var/log/ -type f -not -path '/var/log/journal/*' -exec sh -euc '> "$1"' _ '{}' ';'
+        # Remove temporary files
+        find /tmp/ /var/tmp/ -ignore_readdir_race -mindepth 1 -delete ||:
+        # Reset machine ID
+        > /etc/machine-id
       EOF
     ]
   }

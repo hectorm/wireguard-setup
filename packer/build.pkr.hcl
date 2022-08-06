@@ -22,7 +22,7 @@ build {
         find /tmp/rootfs/ -type f -name .gitkeep -delete
         find /tmp/rootfs/ -type d -exec chmod 755 '{}' ';' -exec chown root:root '{}' ';'
         find /tmp/rootfs/ -type f -exec chmod 644 '{}' ';' -exec chown root:root '{}' ';'
-        find /tmp/rootfs/ -type f -regex '.+/\(bin\|cron\..+\)/.+' -exec chmod 755 '{}' ';'
+        find /tmp/rootfs/ -type f -regex '.+/bin/.+' -exec chmod 755 '{}' ';'
         find /tmp/rootfs/ -type f -regex '.+/\(etc/wireguard\)/.+' -exec chmod 600 '{}' ';'
         find /tmp/rootfs/ -mindepth 1 -maxdepth 1 -exec cp -fla '{}' / ';'
         rm -rf /tmp/rootfs/

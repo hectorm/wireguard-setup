@@ -114,6 +114,11 @@ build {
           ufw.service
       EOF
       ,
+      # Delete "ubuntu" user
+      <<EOF
+        if id -u ubuntu >/dev/null 2>&1; then userdel -r ubuntu; fi
+      EOF
+      ,
       # Create "ssh-user" group
       <<EOF
         groupadd -r ssh-user

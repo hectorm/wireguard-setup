@@ -41,8 +41,8 @@ source "digitalocean" "main" {
 }
 
 source "qemu" "main" {
-  iso_url      = "https://cloud-images.ubuntu.com/daily/server/jammy/current/jammy-server-cloudimg-amd64.img"
-  iso_checksum = "file:https://cloud-images.ubuntu.com/daily/server/jammy/current/SHA256SUMS"
+  iso_url      = "https://cloud-images.ubuntu.com/minimal/daily/jammy/current/jammy-minimal-cloudimg-amd64.img"
+  iso_checksum = "file:https://cloud-images.ubuntu.com/minimal/daily/jammy/current/SHA256SUMS"
   disk_image   = true
 
   vm_name          = "wireguard.qcow2"

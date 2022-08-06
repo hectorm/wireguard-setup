@@ -34,7 +34,7 @@ hostfwd() { printf ',hostfwd=%s::%s-:%s' "$@"; }
 qemu-system-x86_64 \
 	-accel kvm -cpu host -smp 1 -m 512 \
 	-nographic -serial mon:stdio \
-	-device e1000,netdev=n0 \
+	-device virtio-net,netdev=n0 \
 	-netdev user,id=n0"$(hostfwd \
 		tcp 1122    122 \
 		udp 51820 51820 \

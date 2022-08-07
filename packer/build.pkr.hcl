@@ -18,7 +18,7 @@ build {
     ]
     inline_shebang = "/bin/sh -eux"
     inline = [
-       # Set permissions and move files to "/"
+      # Set permissions and move files to "/"
       <<EOF
         find /tmp/rootfs/ -type f -name .gitkeep -delete
         find /tmp/rootfs/ -type d -exec chmod 755 '{}' ';' -exec chown root:root '{}' ';'

@@ -7,6 +7,9 @@
     "*.tfvars": "terraform",
     "*.tfvars.sample": "terraform",
     "meta-data": "yaml",
-    "user-data": "yaml"
+    "user-data": "yaml",
+    "**/cloud/cloud.cfg": "yaml",
+    "**/cloud/cloud.cfg.d/*.cfg": "yaml",
+    "**/cloud/templates/*.tmpl": "jinja"
   }
 }

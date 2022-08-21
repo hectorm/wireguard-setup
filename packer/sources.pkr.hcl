@@ -24,7 +24,7 @@ source "digitalocean" "main" {
 
   image        = "ubuntu-22-04-x64"
   droplet_name = "wireguard-{{timestamp}}"
-  size         = "s-1vcpu-1gb"
+  size         = "s-1vcpu-512mb-10gb"
   region       = "fra1"
 
   snapshot_name = "wireguard-{{timestamp}}"

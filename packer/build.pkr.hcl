@@ -2,6 +2,7 @@ build {
   sources = [
     "source.hcloud.main",
     "source.digitalocean.main",
+    "source.oracle-oci.main",
     "source.qemu.main"
   ]
 

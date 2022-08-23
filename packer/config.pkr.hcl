@@ -8,5 +8,9 @@ packer {
       version = ">= 1.0.8"
       source  = "github.com/digitalocean/digitalocean"
     }
+    oracle = {
+      version = ">= 1.0.2"
+      source  = "github.com/hashicorp/oracle"
+    }
   }
 }

@@ -40,6 +40,36 @@ source "digitalocean" "main" {
   ssh_clear_authorized_keys = true
 }
 
+source "oracle-oci" "main" {
+  key_file = var.oracle_key_file
+
+  base_image_filter {
+    operating_system         = "Canonical Ubuntu"
+    operating_system_version = "22.04 Minimal aarch64"
+  }
+  instance_name = "wireguard-{{timestamp}}"
+  shape         = "VM.Standard.A1.Flex"
+  shape_config {
+    ocpus         = 1
+    memory_in_gbs = 1
+  }
+  availability_domain = var.oracle_availability_domain
+  compartment_ocid    = var.oracle_compartment_ocid
+  subnet_ocid         = var.oracle_subnet_ocid
+
+  image_name = "wireguard-{{timestamp}}"
+  tags = {
+    service = "wireguard"
+  }
+
+  user_data_file = "./oracle/seed/user-data"
+
+  ssh_port                  = "22"
+  ssh_username              = "root"
+  ssh_timeout               = "15m"
+  ssh_clear_authorized_keys = true
+}
+
 source "qemu" "main" {
   iso_url      = "https://cloud-images.ubuntu.com/minimal/daily/jammy/current/jammy-minimal-cloudimg-amd64.img"
   iso_checksum = "file:https://cloud-images.ubuntu.com/minimal/daily/jammy/current/SHA256SUMS"

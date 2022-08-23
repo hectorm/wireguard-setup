@@ -35,7 +35,7 @@ jobs:
           packer init ./
       - name: 'Validate configuration'
         run: |
-          packer validate ./
+          packer validate -syntax-only ./
       - name: 'Check configuration format'
         run: |
           packer fmt -check -diff ./

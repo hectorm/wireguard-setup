@@ -38,7 +38,7 @@ build {
       # Upgrade system
       <<-EOT
         apt-get update
-        apt-get dist-upgrade -o DPkg::Lock::Timeout=300 -y
+        apt-get dist-upgrade -o DPkg::Lock::Timeout=300 -o APT::Get::Always-Include-Phased-Updates=true -y
       EOT
       ,
       # Install packages

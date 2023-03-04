@@ -5,11 +5,11 @@ packer {
       source  = "github.com/hashicorp/hcloud"
     }
     digitalocean = {
-      version = ">= 1.0.8"
+      version = ">= 1.1.1"
       source  = "github.com/digitalocean/digitalocean"
     }
     oracle = {
-      version = ">= 1.0.2"
+      version = ">= 1.0.4"
       source  = "github.com/hashicorp/oracle"
     }
   }

@@ -20,7 +20,7 @@ build {
     inline_shebang = "/bin/sh -eux"
     inline = [
       # Set permissions and move files to "/"
-      <<EOF
+      <<-EOT
         find /tmp/rootfs/ -type f -name .gitkeep -delete
         find /tmp/rootfs/ -type d -exec chmod 755 '{}' ';' -exec chown root:root '{}' ';'
         find /tmp/rootfs/ -type f -exec chmod 644 '{}' ';' -exec chown root:root '{}' ';'
@@ -28,21 +28,21 @@ build {
         find /tmp/rootfs/ -type f -regex '.+/\(etc/wireguard\)/.+' -exec chmod 600 '{}' ';'
         find /tmp/rootfs/ -mindepth 1 -maxdepth 1 -exec cp -fla '{}' / ';'
         rm -rf /tmp/rootfs/
-      EOF
+      EOT
       ,
       # Reload systemd manager configuration
-      <<EOF
+      <<-EOT
         systemctl daemon-reload
-      EOF
+      EOT
       ,
       # Upgrade system
-      <<EOF
+      <<-EOT
         apt-get update
         apt-get dist-upgrade -o DPkg::Lock::Timeout=300 -y
-      EOF
+      EOT
       ,
       # Install packages
-      <<EOF
+      <<-EOT
         apt-get install -y --no-install-recommends \
           apparmor \
           apparmor-profiles \
@@ -66,41 +66,41 @@ build {
           unattended-upgrades \
           unbound \
           wireguard
-      EOF
+      EOT
       ,
       # Remove packages
-      <<EOF
+      <<-EOT
         apt-get purge -y \
           lxd-agent-loader \
           snapd \
           ufw
         apt-get autoremove -y
-      EOF
+      EOT
       ,
       # Set timezone and locale
-      <<EOF
+      <<-EOT
         timedatectl set-timezone UTC
         localectl set-locale LANG=en_US.UTF-8
-      EOF
+      EOT
       ,
       # Replace systemd-resolved with Unbound
-      <<EOF
+      <<-EOT
         systemctl mask --now systemd-resolved.service
         unlink /etc/resolv.conf && printf 'nameserver 127.0.0.1\n' > /etc/resolv.conf
         systemctl enable --now unbound.service unbound-resolvconf.service
-      EOF
+      EOT
       ,
       # Build and install udptunnel
-      <<EOF
+      <<-EOT
         mkdir /usr/local/src/udptunnel/ && cd /usr/local/src/udptunnel/
         git clone 'https://github.com/hectorm/udptunnel.git' ./
         git checkout '796e53532fbd6acc4d51849d161b4e08cc187263'
         make install-strip PREFIX=/usr/local
         udptunnel --help
-      EOF
+      EOT
       ,
       # Setup services and timers
-      <<EOF
+      <<-EOT
         systemctl enable \
           apparmor.service \
           apt-daily-upgrade.timer \
@@ -113,26 +113,26 @@ build {
         systemctl mask \
           snapd.service \
           ufw.service
-      EOF
+      EOT
       ,
       # Delete "ubuntu" user
-      <<EOF
+      <<-EOT
         if id -u ubuntu >/dev/null 2>&1; then userdel -r ubuntu; fi
-      EOF
+      EOT
       ,
       # Create "ssh-user" group
-      <<EOF
+      <<-EOT
         groupadd -r ssh-user
         usermod -aG ssh-user root
-      EOF
+      EOT
       ,
       # Delete "root" user password
-      <<EOF
+      <<-EOT
         usermod -p '*' root
-      EOF
+      EOT
       ,
       # Cleanup
-      <<EOF
+      <<-EOT
         # Remove SSH keys
         rm -rf /etc/ssh/ssh_host_*key* /root/.ssh/
         # Remove WireGuard keys
@@ -153,7 +153,7 @@ build {
         find /tmp/ /var/tmp/ -ignore_readdir_race -mindepth 1 -delete ||:
         # Reset machine ID
         > /etc/machine-id
-      EOF
+      EOT
     ]
   }
 }

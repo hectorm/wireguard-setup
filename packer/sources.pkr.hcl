@@ -80,7 +80,7 @@ source "qemu" "main" {
   output_directory = "./dist/qemu/"
 
   headless     = true
-  accelerator  = "kvm"
+  accelerator  = var.qemu_accelerator
   machine_type = "q35"
   cpu_model    = "host"
   cpus         = 1

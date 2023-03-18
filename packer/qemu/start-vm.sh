@@ -32,7 +32,7 @@ hostfwd() { printf ',hostfwd=%s::%s-:%s' "$@"; }
 
 # Launch VM
 qemu-system-x86_64 \
-	-accel kvm -cpu host -smp 1 -m 512 \
+	-accel kvm -machine q35 -cpu host -smp 1 -m 512 \
 	-nographic -serial mon:stdio \
 	-device virtio-net,netdev=n0 \
 	-netdev user,id=n0"$(hostfwd \

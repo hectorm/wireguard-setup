@@ -79,10 +79,12 @@ source "qemu" "main" {
   http_directory   = "./qemu/http/"
   output_directory = "./dist/qemu/"
 
-  accelerator = var.qemu_accelerator
-  cpus        = 1
-  memory      = 512
-  headless    = true
+  headless     = true
+  accelerator  = "kvm"
+  machine_type = "q35"
+  cpu_model    = "host"
+  cpus         = 1
+  memory       = 512
   qemuargs = [
     ["-smbios", "type=1,serial=ds=nocloud-net;s=http://{{.HTTPIP}}:{{.HTTPPort}}/seed/"]
   ]

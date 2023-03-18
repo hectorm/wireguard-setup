@@ -1,17 +1,13 @@
 #cloud-config
 
 write_files:
-  - path: "/etc/wireguard/wg0-privatekey"
+  - path: "/etc/wireguard/wg0.conf.d/privatekey"
     owner: "root:root"
     permissions: "0600"
     content: |
       ${wg_server_wg_privatekey}
-  - path: "/etc/wireguard/wg0-peers.conf"
-    owner: "root:root"
-    permissions: "0644"
-    content: |
-      %{~ for index, pubkey in wg_server_wg_peer_publickeys ~}
-      [Peer]
-      PublicKey = ${pubkey}
-      AllowedIPs = 10.10.10.${index+2}/32, fd10:10:10::${index+2}/128
-      %{~ endfor ~}
+runcmd:
+  %{~ for index, pubkey in wg_server_wg_peer_publickeys ~}
+  - wg-create-peer --interface wg0 --peer-number "${index}" --peer-private-key "none" --peer-public-key "${pubkey}" --quiet
+  %{~ endfor ~}
+  - systemctl try-restart wg-quick@wg0.service

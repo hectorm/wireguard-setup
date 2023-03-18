@@ -1,0 +1,10 @@
+# ${WG_PEER_COMMENT}
+[Interface]
+PrivateKey = ${WG_PEER_PRIVATE_KEY}
+Address = 10.100.${WG_PEER_IPV4_SUFFIX}/32, fd10:100::${WG_PEER_IPV6_SUFFIX}/128
+DNS = 8.8.8.8, 2001:4860:4860::8888, 8.8.4.4, 2001:4860:4860::8844
+
+[Peer]
+PublicKey = ${WG_OWN_PUBLIC_KEY}
+AllowedIPs = 0.0.0.0/0, ::0/0
+Endpoint = XXX.XXX.XXX.XXX:51820

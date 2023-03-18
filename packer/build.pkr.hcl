@@ -53,6 +53,7 @@ build {
           gcc \
           git \
           htop \
+          gettext-base \
           libc6-dev \
           libsystemd-dev \
           locales \
@@ -62,7 +63,6 @@ build {
           openresolv \
           pkgconf \
           qrencode \
-          ssh-import-id \
           unattended-upgrades \
           unbound \
           wireguard

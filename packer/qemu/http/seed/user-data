@@ -4,8 +4,5 @@ users: []
 disable_root: false
 chpasswd: { list: ['root:toor'], expire: false }
 runcmd:
-  - ['/usr/bin/cp', '-a', '/etc/ssh/sshd_config', '/etc/ssh/sshd_config_orig']
-  - ['/usr/bin/sed', '-ni', '/^PermitRootLogin[[:blank:]]/!p;$aPermitRootLogin yes', '/etc/ssh/sshd_config']
-  - ['/usr/bin/sed', '-ni', '/^PasswordAuthentication[[:blank:]]/!p;$aPasswordAuthentication yes', '/etc/ssh/sshd_config']
-  - ['/usr/bin/systemctl', 'restart', 'ssh.service']
-  - ['/usr/bin/mv', '-f', '/etc/ssh/sshd_config_orig', '/etc/ssh/sshd_config']
+  - 'printf "PermitRootLogin yes\nPasswordAuthentication yes\n" > /etc/ssh/sshd_config.d/50-cloud-init.conf'
+  - 'systemctl try-reload-or-restart ssh.service; sleep 5; rm -f /etc/ssh/sshd_config.d/50-cloud-init.conf'

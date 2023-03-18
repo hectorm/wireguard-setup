@@ -26,7 +26,7 @@ build {
         find /tmp/rootfs/ -type f -exec chmod 644 '{}' ';' -exec chown root:root '{}' ';'
         find /tmp/rootfs/ -type f -regex '.+/bin/.+' -exec chmod 755 '{}' ';'
         find /tmp/rootfs/ -type f -regex '.+/etc/wireguard/.+' -exec chmod 600 '{}' ';'
-        find /tmp/rootfs/ -mindepth 1 -maxdepth 1 -exec cp -fla '{}' / ';'
+        find /tmp/rootfs/ -mindepth 1 -maxdepth 1 -exec cp -fa '{}' / ';'
         rm -rf /tmp/rootfs/
       EOT
       ,

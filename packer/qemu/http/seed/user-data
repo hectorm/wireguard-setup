@@ -1,8 +1,8 @@
 #cloud-config
 
+users: []
 disable_root: false
 chpasswd: { list: ['root:toor'], expire: false }
-
 runcmd:
   - ['/usr/bin/cp', '-a', '/etc/ssh/sshd_config', '/etc/ssh/sshd_config_orig']
   - ['/usr/bin/sed', '-ni', '/^PermitRootLogin[[:blank:]]/!p;$aPermitRootLogin yes', '/etc/ssh/sshd_config']

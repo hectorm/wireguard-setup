@@ -115,11 +115,6 @@ build {
           ufw.service
       EOT
       ,
-      # Delete "ubuntu" user
-      <<-EOT
-        if id -u ubuntu >/dev/null 2>&1; then userdel -r ubuntu; fi
-      EOT
-      ,
       # Create "ssh-user" group
       <<-EOT
         groupadd -r ssh-user

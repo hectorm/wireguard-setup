@@ -82,7 +82,6 @@ source "qemu" "main" {
   headless     = true
   accelerator  = var.qemu_accelerator
   machine_type = "q35"
-  cpu_model    = "host"
   cpus         = 1
   memory       = 512
   qemuargs = [

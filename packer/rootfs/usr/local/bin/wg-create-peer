@@ -13,6 +13,7 @@ optParse() {
 			'-c'*|'--peer-comment') optArgStr "${@-}"; peerComment="${optArg?}"; shift "${optShift:?}" ;;
 			'-k'*|'--peer-private-key') optArgStr "${@-}"; peerPrivateKey="${optArg?}"; shift "${optShift:?}" ;;
 			'-p'*|'--peer-public-key') optArgStr "${@-}"; peerPublicKey="${optArg?}"; shift "${optShift:?}" ;;
+			'-r' |'--qr'|'--no-qr') optArgBool "${@-}"; qr="${optArg:?}" ;;
 			'-q' |'--quiet'|'--no-quiet') optArgBool "${@-}"; quiet="${optArg:?}" ;;
 			'-h' |'--help') showHelp ;;
 			# If "--" is found, the remaining positional parameters are saved and the parsing ends.
@@ -73,6 +74,9 @@ showHelp() {
 		 -p, --peer-public-key <PUBLIC KEY>
 		    Peer public key.
 
+		 -r, --[no-]qr
+		    Print a QR code with the remote peer configuration.
+
 		 -q, --[no-]quiet
 		    Suppress non-error messages.
 
@@ -89,7 +93,6 @@ main() {
 	{ optParse "${@-}"; _IFS="${IFS?}"; IFS="${SEP:?}"; set -- ${POS-} >/dev/null; IFS="${_IFS?}"; }
 
 	# Set default values.
-	quiet="${quiet:-false}"
 	interface="${interface:-wg0}"
 	ownPublicKey="$(wg show "${interface:?}" public-key)"
 	peerPrivateKey="${peerPrivateKey:-$(wg genkey)}"
@@ -98,6 +101,8 @@ main() {
 	peerIpv4Suffix="$(printf '%d.%d' $((((peerNumber + 2) >> 8) & 0xFF)) $(((peerNumber + 2) & 0xFF)))"
 	peerIpv6Suffix="$(printf '%x' $(((peerNumber + 2) & 0xFFFF)))"
 	peerComment="${peerComment:-${interface:?} - peer #${peerNumber:?}}"
+	qr="${qr:-true}"
+	quiet="${quiet:-false}"
 
 	# Create local peer configuration.
 	export WG_OWN_PUBLIC_KEY="${ownPublicKey:?}"
@@ -108,9 +113,14 @@ main() {
 	export WG_PEER_COMMENT="${peerComment:?}"
 	envsubst < "/etc/wireguard/${interface:?}.conf.d/peer-local.tpl" > "/etc/wireguard/${interface:?}.conf.d/peer-${peerNumber:?}.conf"
 
+	# Print remote peer configuration.
 	if [ "${quiet:?}" != 'true' ]; then
-		# Print remote peer configuration.
-		{ envsubst < "/etc/wireguard/${interface:?}.conf.d/peer-remote.tpl" | tee /dev/stderr | qrencode -t UTF8; } 3>&2 2>&1 1>&3
+		peerRemoteConfig="$(envsubst < "/etc/wireguard/${interface:?}.conf.d/peer-remote.tpl")"
+		printf '%s\n' "${peerRemoteConfig:?}"
+		if [ "${qr:?}" = 'true' ] && command -v qrencode >/dev/null 2>&1; then
+			printf '\n' >&2
+			printf '%s\n' "${peerRemoteConfig:?}" | qrencode -t UTF8 >&2
+		fi
 	fi
 }
 

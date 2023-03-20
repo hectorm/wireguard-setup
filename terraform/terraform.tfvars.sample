@@ -4,8 +4,13 @@ wg_server_name     = ""
 wg_server_type     = ""
 wg_server_location = ""
 
-wg_server_wg_privatekey      = ""
-wg_server_wg_peer_publickeys = []
+wg_server_wg_privatekey = ""
+wg_server_wg_peers      = [
+  {
+    publickey    = ""
+    presharedkey = ""
+  }
+]
 
 wg_firewall_name = ""
 

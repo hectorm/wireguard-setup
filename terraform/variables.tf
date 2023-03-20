@@ -28,9 +28,13 @@ variable "wg_server_wg_privatekey" {
   default     = ""
 }
 
-variable "wg_server_wg_peer_publickeys" {
-  type        = list(string)
-  description = "WireGuard peer public keys"
+variable "wg_server_wg_peers" {
+  type = list(object({
+    comment      = optional(string, "")
+    publickey    = string
+    presharedkey = string
+  }))
+  description = "WireGuard peers"
   default     = []
 }
 

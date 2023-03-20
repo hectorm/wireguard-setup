@@ -11,6 +11,7 @@ optParse() {
 			'-i'*|'--interface') optArgStr "${@-}"; interface="${optArg?}"; shift "${optShift:?}" ;;
 			'-n'*|'--peer-number') optArgStr "${@-}"; peerNumber="${optArg?}"; shift "${optShift:?}" ;;
 			'-c'*|'--peer-comment') optArgStr "${@-}"; peerComment="${optArg?}"; shift "${optShift:?}" ;;
+			'-e'*|'--peer-endpoint') optArgStr "${@-}"; peerEndpoint="${optArg?}"; shift "${optShift:?}" ;;
 			'-k'*|'--peer-private-key') optArgStr "${@-}"; peerPrivateKey="${optArg?}"; shift "${optShift:?}" ;;
 			'-p'*|'--peer-public-key') optArgStr "${@-}"; peerPublicKey="${optArg?}"; shift "${optShift:?}" ;;
 			'-s'*|'--peer-preshared-key') optArgStr "${@-}"; peerPresharedKey="${optArg?}"; shift "${optShift:?}" ;;
@@ -69,6 +70,9 @@ showHelp() {
 		 -c, --peer-comment <COMMENT>
 		    Peer comment.
 
+		 -e, --peer-endpoint <ENDPOINT>
+		    Peer endpoint (host and port).
+
 		 -k, --peer-private-key <PRIVATE KEY>
 		    Peer private key.
 
@@ -99,24 +103,26 @@ main() {
 	# Set default values.
 	interface="${interface:-wg0}"
 	ownPublicKey="$(wg show "${interface:?}" public-key)"
+	peerNumber="${peerNumber:-$(i='0'; while [ -e "/etc/wireguard/${interface:?}.conf.d/peer-${i:?}.conf" ]; do i="$((i+1))"; done; printf '%d' "${i:?}")}"
+	peerComment="${peerComment:-${interface:?} - peer #${peerNumber:?}}"
+	peerEndpoint="${peerEndpoint:-$(hostname -f):51820}"
 	peerPrivateKey="${peerPrivateKey:-$(wg genkey)}"
 	peerPublicKey="${peerPublicKey:-$(printf '%s' "${peerPrivateKey:?}" | wg pubkey)}"
 	peerPresharedKey="${peerPresharedKey:-$(wg genpsk)}"
-	peerNumber="${peerNumber:-$(i='0'; while [ -e "/etc/wireguard/${interface:?}.conf.d/peer-${i:?}.conf" ]; do i="$((i+1))"; done; printf '%d' "${i:?}")}"
 	peerIpv4Suffix="$(printf '%d.%d' $((((peerNumber + 2) >> 8) & 0xFF)) $(((peerNumber + 2) & 0xFF)))"
 	peerIpv6Suffix="$(printf '%x' $(((peerNumber + 2) & 0xFFFF)))"
-	peerComment="${peerComment:-${interface:?} - peer #${peerNumber:?}}"
 	qr="${qr:-true}"
 	quiet="${quiet:-false}"
 
 	# Create local peer configuration.
 	export WG_OWN_PUBLIC_KEY="${ownPublicKey:?}"
+	export WG_PEER_COMMENT="${peerComment:?}"
+	export WG_PEER_ENDPOINT="${peerEndpoint:?}"
 	export WG_PEER_PRIVATE_KEY="${peerPrivateKey:?}"
 	export WG_PEER_PUBLIC_KEY="${peerPublicKey:?}"
 	export WG_PEER_PRESHARED_KEY="${peerPresharedKey:?}"
 	export WG_PEER_IPV4_SUFFIX="${peerIpv4Suffix:?}"
 	export WG_PEER_IPV6_SUFFIX="${peerIpv6Suffix:?}"
-	export WG_PEER_COMMENT="${peerComment:?}"
 	envsubst < "/etc/wireguard/${interface:?}.conf.d/peer-local.tpl" > "/etc/wireguard/${interface:?}.conf.d/peer-${peerNumber:?}.conf"
 
 	# Print remote peer configuration.

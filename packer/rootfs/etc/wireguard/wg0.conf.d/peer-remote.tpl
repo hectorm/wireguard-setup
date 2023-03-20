@@ -8,4 +8,4 @@ DNS = 10.100.0.1, fd10:100::1
 PublicKey = ${WG_OWN_PUBLIC_KEY}
 PresharedKey = ${WG_PEER_PRESHARED_KEY}
 AllowedIPs = 0.0.0.0/0, ::0/0
-Endpoint = XXX.XXX.XXX.XXX:51820
+Endpoint = ${WG_PEER_ENDPOINT}

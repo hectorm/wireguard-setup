@@ -51,9 +51,9 @@ build {
           ca-certificates \
           dns-root-data \
           gcc \
+          gettext-base \
           git \
           htop \
-          gettext-base \
           libc6-dev \
           libsystemd-dev \
           locales \

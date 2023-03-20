@@ -13,6 +13,7 @@ optParse() {
 			'-c'*|'--peer-comment') optArgStr "${@-}"; peerComment="${optArg?}"; shift "${optShift:?}" ;;
 			'-k'*|'--peer-private-key') optArgStr "${@-}"; peerPrivateKey="${optArg?}"; shift "${optShift:?}" ;;
 			'-p'*|'--peer-public-key') optArgStr "${@-}"; peerPublicKey="${optArg?}"; shift "${optShift:?}" ;;
+			'-s'*|'--peer-preshared-key') optArgStr "${@-}"; peerPresharedKey="${optArg?}"; shift "${optShift:?}" ;;
 			'-r' |'--qr'|'--no-qr') optArgBool "${@-}"; qr="${optArg:?}" ;;
 			'-q' |'--quiet'|'--no-quiet') optArgBool "${@-}"; quiet="${optArg:?}" ;;
 			'-h' |'--help') showHelp ;;
@@ -74,6 +75,9 @@ showHelp() {
 		 -p, --peer-public-key <PUBLIC KEY>
 		    Peer public key.
 
+		 -s, --peer-preshared-key <PRESHARED KEY>
+		    Peer preshared key.
+
 		 -r, --[no-]qr
 		    Print a QR code with the remote peer configuration.
 
@@ -97,6 +101,7 @@ main() {
 	ownPublicKey="$(wg show "${interface:?}" public-key)"
 	peerPrivateKey="${peerPrivateKey:-$(wg genkey)}"
 	peerPublicKey="${peerPublicKey:-$(printf '%s' "${peerPrivateKey:?}" | wg pubkey)}"
+	peerPresharedKey="${peerPresharedKey:-$(wg genpsk)}"
 	peerNumber="${peerNumber:-$(i='0'; while [ -e "/etc/wireguard/${interface:?}.conf.d/peer-${i:?}.conf" ]; do i="$((i+1))"; done; printf '%d' "${i:?}")}"
 	peerIpv4Suffix="$(printf '%d.%d' $((((peerNumber + 2) >> 8) & 0xFF)) $(((peerNumber + 2) & 0xFF)))"
 	peerIpv6Suffix="$(printf '%x' $(((peerNumber + 2) & 0xFFFF)))"
@@ -108,6 +113,7 @@ main() {
 	export WG_OWN_PUBLIC_KEY="${ownPublicKey:?}"
 	export WG_PEER_PRIVATE_KEY="${peerPrivateKey:?}"
 	export WG_PEER_PUBLIC_KEY="${peerPublicKey:?}"
+	export WG_PEER_PRESHARED_KEY="${peerPresharedKey:?}"
 	export WG_PEER_IPV4_SUFFIX="${peerIpv4Suffix:?}"
 	export WG_PEER_IPV6_SUFFIX="${peerIpv6Suffix:?}"
 	export WG_PEER_COMMENT="${peerComment:?}"

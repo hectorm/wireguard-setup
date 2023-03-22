@@ -33,9 +33,3 @@ variable "oracle_subnet_ocid" {
   description = "Subnet OCID"
   default     = "ocid1.subnet.xxxx"
 }
-
-variable "qemu_accelerator" {
-  type        = string
-  description = "The accelerator type to use when running the VM"
-  default     = "kvm"
-}

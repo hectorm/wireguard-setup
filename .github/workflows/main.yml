@@ -88,4 +88,4 @@ jobs:
           packer init ./
       - name: 'Build image'
         run: |
-          make build-qemu PACKER_LOG=1 PKR_VAR_qemu_accelerator=none
+          make build-qemu PACKER_LOG=1

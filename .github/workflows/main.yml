@@ -82,10 +82,18 @@ jobs:
         run: |
           curl --proto '=https' --tlsv1.3 -sSf 'https://apt.releases.hashicorp.com/gpg' | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/hashicorp.gpg
           printf '%s\n' "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/trusted.gpg.d/hashicorp.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list >/dev/null
-          sudo apt-get update && sudo apt-get install -y --no-install-recommends packer qemu-utils qemu-system-x86
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends packer qemu-utils qemu-system-x86 cloud-image-utils openssh-client sshpass
       - name: 'Init Packer'
         run: |
           packer init ./
       - name: 'Build image'
         run: |
           make build-qemu PACKER_LOG=1
+      - name: 'Test image'
+        run: |
+          ./qemu/start-vm.sh &
+          set -- sshpass -p toor ssh root@127.0.0.1 -p 1122 -o StrictHostKeyChecking=no -o ConnectTimeout=1
+          attempt=0; until [ "${attempt:?}" -gt 60 ] || "$@" exit; do attempt=$((attempt+1)); sleep 5; done
+          "$@" 'set -x; systemctl is-system-running --wait; ret="$?"; systemctl --failed; exit "${ret:?}"'
+          "$@" 'set -x; wg show wg0'
+          "$@" 'set -x; poweroff'

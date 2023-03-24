@@ -33,3 +33,15 @@ variable "oracle_subnet_ocid" {
   description = "Subnet OCID"
   default     = "ocid1.subnet.xxxx"
 }
+
+variable "qemu_efi_firmware_code" {
+  type        = string
+  description = "EFI firmware file"
+  default     = "/usr/share/edk2/x64/OVMF_CODE.4m.fd"
+}
+
+variable "qemu_efi_firmware_vars" {
+  type        = string
+  description = "EFI NVRAM variables file"
+  default     = "/usr/share/edk2/x64/OVMF_VARS.4m.fd"
+}

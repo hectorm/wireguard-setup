@@ -102,3 +102,44 @@ source "qemu" "main" {
 
   shutdown_command = "shutdown -P now"
 }
+
+source "qemu" "baremetal" {
+  iso_url      = "https://cdimage.ubuntu.com/ubuntu-server/jammy/daily-live/current/jammy-live-server-amd64.iso"
+  iso_checksum = "file:https://cdimage.ubuntu.com/ubuntu-server/jammy/daily-live/current/SHA256SUMS"
+  disk_image   = false
+
+  vm_name          = "wireguard.qcow2"
+  http_directory   = "./qemu/http/"
+  output_directory = "./dist/qemu-baremetal/"
+
+  headless          = true
+  machine_type      = "q35"
+  cpus              = 1
+  memory            = 1024
+  efi_firmware_code = var.qemu_efi_firmware_code
+  efi_firmware_vars = var.qemu_efi_firmware_vars
+
+  net_device = "virtio-net"
+
+  format           = "qcow2"
+  disk_size        = "10G"
+  disk_interface   = "virtio"
+  disk_compression = false
+
+  boot_wait = "25s"
+  boot_command = [
+    "c<wait>",
+    "set gfxpayload=keep<enter><wait>",
+    "linux /casper/hwe-vmlinuz --- autoinstall ds='nocloud-net;s=http://{{.HTTPIP}}:{{.HTTPPort}}/seed-autoinstall/'<enter><wait>",
+    "initrd /casper/hwe-initrd<enter><wait>",
+    "boot<enter>"
+  ]
+
+  ssh_port                  = "22"
+  ssh_username              = "root"
+  ssh_password              = "toor"
+  ssh_timeout               = "90m"
+  ssh_clear_authorized_keys = true
+
+  shutdown_command = "shutdown -P now"
+}

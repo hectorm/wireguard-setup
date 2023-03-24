@@ -6,11 +6,14 @@ export LC_ALL=C
 SRC_DIR=$(CDPATH='' cd -- "$(dirname -- "$(dirname -- "${0:?}")")" && pwd -P)
 TMP_DIR=$(mktemp -d)
 
-: "${ORIGINAL_DISK:=${SRC_DIR:?}/dist/qemu/wireguard.qcow2}"
+: "${ORIGINAL_DISK:=${SRC_DIR:?}/dist/qemu-baremetal/wireguard.qcow2}"
 : "${SNAPSHOT_DISK:=${TMP_DIR:?}/snapshot.qcow2}"
 
 : "${USERDATA_YAML:=${SRC_DIR:?}/qemu/http/seed/user-data}"
 : "${USERDATA_DISK:=${TMP_DIR:?}/seed.img}"
+
+: "${EFI_FIRMWARE_CODE:=/usr/share/edk2/x64/OVMF_CODE.4m.fd}"
+: "${EFI_FIRMWARE_VARS:=/usr/share/edk2/x64/OVMF_VARS.4m.fd}"
 
 # Remove temporary files on exit
 # shellcheck disable=SC2154
@@ -23,7 +26,7 @@ done
 
 # Set main arguments for QEMU
 set --
-set -- "$@" -machine q35 -smp 1 -m 512
+set -- "$@" -machine q35 -smp 1 -m 1024
 set -- "$@" -nographic -serial mon:stdio
 set -- "$@" -device virtio-net,netdev=n0
 set -- "$@" -netdev user,id=n0"$(printf ',hostfwd=%s:%s:%s-:%s' \
@@ -32,6 +35,10 @@ set -- "$@" -netdev user,id=n0"$(printf ',hostfwd=%s:%s:%s-:%s' \
 	udp 0.0.0.0   1053     53 \
 	tcp 0.0.0.0   1443    443 \
 )"
+
+# Set EFI firmware code and variables
+set -- "$@" -drive file="${EFI_FIRMWARE_CODE:?}",if=pflash,unit=0,format=raw,readonly=on
+set -- "$@" -drive file="${EFI_FIRMWARE_VARS:?}",if=pflash,unit=1,format=raw,snapshot=on
 
 # Create a snapshot image to preserve the original image
 qemu-img create -f qcow2 -b "${ORIGINAL_DISK:?}" -F qcow2 "${SNAPSHOT_DISK:?}"

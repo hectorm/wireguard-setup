@@ -1,0 +1,64 @@
+#cloud-config
+
+autoinstall:
+  version: 1
+  locale: 'en_US.UTF-8'
+  keyboard:
+    layout: 'us'
+  timezone: 'UTC'
+  storage:
+    grub:
+      reorder_uefi: false
+    swap:
+      size: 0
+    config:
+      - id: 'disk-vda'
+        type: 'disk'
+        ptable: 'gpt'
+        path: '/dev/vda'
+      - id: 'partition-0'
+        type: 'partition'
+        device: 'disk-vda'
+        number: 1
+        size: 564133888
+        grub_device: true
+        flag: 'boot'
+      - id: 'format-0'
+        type: 'format'
+        volume: 'partition-0'
+        fstype: 'fat32'
+      - id: 'mount-0'
+        type: 'mount'
+        device: 'format-0'
+        path: '/boot/efi'
+      - id: 'partition-1'
+        type: 'partition'
+        device: 'disk-vda'
+        number: 2
+        size: -1
+      - id: 'format-1'
+        type: 'format'
+        volume: 'partition-1'
+        fstype: 'ext4'
+      - id: 'mount-1'
+        type: 'mount'
+        device: 'format-1'
+        path: '/'
+  apt:
+    geoip: false
+  kernel:
+    flavor: 'hwe'
+  drivers:
+    install: false
+  source:
+    id: 'ubuntu-server-minimal'
+    search_drivers: false
+  ssh:
+    install-server: true
+  user-data:
+    users: []
+    disable_root: false
+    chpasswd: { list: ['root:toor'], expire: false }
+    runcmd:
+      - 'printf "PermitRootLogin yes\nPasswordAuthentication yes\n" > /etc/ssh/sshd_config.d/50-cloud-init.conf'
+      - 'systemctl try-reload-or-restart ssh.service; sleep 5; rm -f /etc/ssh/sshd_config.d/50-cloud-init.conf'

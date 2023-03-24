@@ -11,6 +11,7 @@ PACKER_HCLOUD_OUT := ./dist/hcloud/wireguard.log
 PACKER_DIGITALOCEAN_OUT := ./dist/digitalocean/wireguard.log
 PACKER_ORACLE_OUT := ./dist/oracle/wireguard.log
 PACKER_QEMU_OUT := ./dist/qemu/wireguard.qcow2
+PACKER_QEMU_BAREMETAL_OUT := ./dist/qemu-baremetal/wireguard.qcow2
 
 ##################################################
 ## "all" target
@@ -54,10 +55,17 @@ $(PACKER_QEMU_OUT):
 	mkdir -p '$(dir $(PACKER_QEMU_OUT))'
 	'$(PACKER)' build -force -only=qemu.main '$(PACKER_WORK_DIR)'
 
+.PHONY: build-qemu-baremetal
+build-qemu-baremetal: $(PACKER_QEMU_BAREMETAL_OUT)
+
+$(PACKER_QEMU_BAREMETAL_OUT):
+	mkdir -p '$(dir $(PACKER_QEMU_BAREMETAL_OUT))'
+	'$(PACKER)' build -force -only=qemu.baremetal '$(PACKER_WORK_DIR)'
+
 ##################################################
 ## "clean" target
 ##################################################
 
 .PHONY: clean
 clean:
-	rm -rf '$(PACKER_HCLOUD_OUT)' '$(PACKER_DIGITALOCEAN_OUT)' '$(PACKER_ORACLE_OUT)' '$(PACKER_QEMU_OUT)' '$(PACKER_CACHE_DIR)'
+	rm -rf '$(PACKER_HCLOUD_OUT)' '$(PACKER_DIGITALOCEAN_OUT)' '$(PACKER_ORACLE_OUT)' '$(PACKER_QEMU_OUT)' '$(PACKER_QEMU_BAREMETAL_OUT)' '$(PACKER_CACHE_DIR)'

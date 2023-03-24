@@ -3,7 +3,8 @@ build {
     "source.hcloud.main",
     "source.digitalocean.main",
     "source.oracle-oci.main",
-    "source.qemu.main"
+    "source.qemu.main",
+    "source.qemu.baremetal"
   ]
 
   provisioner "file" {

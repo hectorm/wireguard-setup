@@ -134,7 +134,7 @@ build {
         # Remove WireGuard keys
         rm -rf /etc/wireguard/*-*key
         # Remove APT cache
-        find /var/lib/apt/lists/ -mindepth 1 -delete
+        apt-get clean; find /var/lib/apt/lists/ -mindepth 1 -delete
         # Remove APT backup files
         find / -type f -regex '.+\.\(dpkg\|ucf\)-\(old\|new\|dist\)' -delete ||:
         # Remove snap directories

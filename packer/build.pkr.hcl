@@ -149,6 +149,8 @@ build {
         find /tmp/ /var/tmp/ -ignore_readdir_race -mindepth 1 -delete ||:
         # Reset machine ID
         > /etc/machine-id
+        # Clear unused disk space
+        dd if=/dev/zero of=/zero bs=1M 2>/dev/null ||:; rm -f /zero
       EOT
     ]
   }

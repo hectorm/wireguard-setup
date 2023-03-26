@@ -122,7 +122,7 @@ source "qemu" "baremetal" {
   net_device = "virtio-net"
 
   format           = "qcow2"
-  disk_size        = "10G"
+  disk_size        = "4G"
   disk_interface   = "virtio"
   disk_compression = false
 

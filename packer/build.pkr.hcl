@@ -57,6 +57,7 @@ build {
           htop \
           libc6-dev \
           libsystemd-dev \
+          linux-virtual-hwe-"$(lsb_release -rs)" \
           locales \
           make \
           nano \

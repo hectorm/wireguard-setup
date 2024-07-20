@@ -1,95 +1,95 @@
-name: 'Main'
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: "Main"
 
 on:
   push:
-    tags: ['*']
-    branches: ['*']
+    tags: ["*"]
+    branches: ["*"]
   pull_request:
-    branches: ['*']
+    branches: ["*"]
   schedule:
-    - cron: '20 04 1,15 * *'
+    - cron: "20 04 1,15 * *"
   workflow_dispatch:
 
 permissions: {}
 
 jobs:
-
   validate-packer:
-    name: 'Validate Packer configuration'
-    runs-on: 'ubuntu-22.04'
+    name: "Validate Packer configuration"
+    runs-on: "ubuntu-22.04"
     permissions:
-      contents: 'read'
+      contents: "read"
     defaults:
       run:
-        working-directory: './packer/'
+        working-directory: "./packer/"
     steps:
-      - name: 'Checkout project'
-        uses: 'actions/checkout@v4'
-      - name: 'Install dependencies'
+      - name: "Checkout project"
+        uses: "actions/checkout@v4"
+      - name: "Install dependencies"
         run: |
           curl --proto '=https' --tlsv1.3 -sSf 'https://apt.releases.hashicorp.com/gpg' | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/hashicorp.gpg
           printf '%s\n' "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/trusted.gpg.d/hashicorp.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list >/dev/null
           sudo apt-get update && sudo apt-get install -y --no-install-recommends packer
-      - name: 'Init Packer'
+      - name: "Init Packer"
         run: |
           packer init ./
-      - name: 'Validate configuration'
+      - name: "Validate configuration"
         run: |
           packer validate -syntax-only ./
-      - name: 'Check configuration format'
+      - name: "Check configuration format"
         run: |
           packer fmt -check -diff ./
 
   validate-terraform:
-    name: 'Validate Terraform configuration'
-    runs-on: 'ubuntu-22.04'
+    name: "Validate Terraform configuration"
+    runs-on: "ubuntu-22.04"
     permissions:
-      contents: 'read'
+      contents: "read"
     defaults:
       run:
-        working-directory: './terraform/'
+        working-directory: "./terraform/"
     steps:
-      - name: 'Checkout project'
-        uses: 'actions/checkout@v4'
-      - name: 'Install dependencies'
+      - name: "Checkout project"
+        uses: "actions/checkout@v4"
+      - name: "Install dependencies"
         run: |
           curl --proto '=https' --tlsv1.3 -sSf 'https://apt.releases.hashicorp.com/gpg' | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/hashicorp.gpg
           printf '%s\n' "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/trusted.gpg.d/hashicorp.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list >/dev/null
           sudo apt-get update && sudo apt-get install -y --no-install-recommends terraform
-      - name: 'Init Terraform'
+      - name: "Init Terraform"
         run: |
           terraform init
-      - name: 'Validate configuration'
+      - name: "Validate configuration"
         run: |
           terraform validate ./
-      - name: 'Check configuration format'
+      - name: "Check configuration format"
         run: |
           terraform fmt -check -diff ./
 
   build-packer:
-    name: 'Build Packer image'
-    needs: ['validate-packer']
-    runs-on: 'ubuntu-22.04'
+    name: "Build Packer image"
+    needs: ["validate-packer"]
+    runs-on: "ubuntu-22.04"
     permissions:
-      contents: 'read'
+      contents: "read"
     defaults:
       run:
-        working-directory: './packer/'
+        working-directory: "./packer/"
     steps:
-      - name: 'Checkout project'
-        uses: 'actions/checkout@v4'
-      - name: 'Install dependencies'
+      - name: "Checkout project"
+        uses: "actions/checkout@v4"
+      - name: "Install dependencies"
         run: |
           curl --proto '=https' --tlsv1.3 -sSf 'https://apt.releases.hashicorp.com/gpg' | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/hashicorp.gpg
           printf '%s\n' "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/trusted.gpg.d/hashicorp.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list >/dev/null
           sudo apt-get update && sudo apt-get install -y --no-install-recommends packer qemu-utils qemu-system-x86 cloud-image-utils openssh-client sshpass
-      - name: 'Init Packer'
+      - name: "Init Packer"
         run: |
           packer init ./
-      - name: 'Build image'
+      - name: "Build image"
         run: |
           make build-qemu PACKER_LOG=1
-      - name: 'Test image'
+      - name: "Test image"
         run: |
           ./qemu/start-vm.sh &
           set -- sshpass -p toor ssh root@127.0.0.1 -p 1122 -o StrictHostKeyChecking=no -o ConnectTimeout=1

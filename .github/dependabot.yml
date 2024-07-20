@@ -6,8 +6,14 @@ updates:
     directory: "/terraform"
     schedule:
       interval: "weekly"
+    groups:
+      terraform-all:
+        patterns: ["*"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    groups:
+      github-actions-all:
+        patterns: ["*"]

@@ -82,13 +82,15 @@ jobs:
         run: |
           curl --proto '=https' --tlsv1.3 -sSf 'https://apt.releases.hashicorp.com/gpg' | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/hashicorp.gpg
           printf '%s\n' "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/trusted.gpg.d/hashicorp.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list >/dev/null
-          sudo apt-get update && sudo apt-get install -y --no-install-recommends packer qemu-utils qemu-system-x86 cloud-image-utils openssh-client sshpass
+          sudo apt-get update && sudo apt-get install -y --no-install-recommends packer qemu-utils qemu-system-x86 ovmf cloud-image-utils openssh-client sshpass
       - name: "Init Packer"
         run: |
           packer init ./
       - name: "Build image"
         run: |
-          make build-qemu PACKER_LOG=1
+          make build-qemu PACKER_LOG=1 \
+            PKR_VAR_qemu_efi_firmware_code=/usr/share/OVMF/OVMF_CODE_4M.fd \
+            PKR_VAR_qemu_efi_firmware_vars=/usr/share/OVMF/OVMF_VARS_4M.fd
       - name: "Test image"
         run: |
           ./qemu/start-vm.sh &

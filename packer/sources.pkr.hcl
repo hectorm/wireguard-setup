@@ -52,9 +52,9 @@ source "qemu" "main" {
   output_directory = "./dist/qemu/"
 
   headless     = true
-  accelerator  = var.qemu_binary == "qemu-system-aarch64" ? "none" : "kvm"
+  accelerator  = var.qemu_binary == "qemu-system-aarch64" ? "none" : null
   machine_type = var.qemu_binary == "qemu-system-aarch64" ? "virt,gic-version=3" : "q35"
-  cpu_model    = var.qemu_binary == "qemu-system-aarch64" ? "cortex-a76" : "host"
+  cpu_model    = var.qemu_binary == "qemu-system-aarch64" ? "cortex-a76" : null
   cpus         = 2
   memory       = 1024
   qemu_binary  = var.qemu_binary
@@ -92,9 +92,9 @@ source "qemu" "baremetal" {
   output_directory = "./dist/qemu-baremetal/"
 
   headless     = true
-  accelerator  = var.qemu_binary == "qemu-system-aarch64" ? "none" : "kvm"
+  accelerator  = var.qemu_binary == "qemu-system-aarch64" ? "none" : null
   machine_type = var.qemu_binary == "qemu-system-aarch64" ? "virt,gic-version=3" : "q35"
-  cpu_model    = var.qemu_binary == "qemu-system-aarch64" ? "cortex-a76" : "host"
+  cpu_model    = var.qemu_binary == "qemu-system-aarch64" ? "cortex-a76" : null
   cpus         = 2
   memory       = 1024
   qemu_binary  = var.qemu_binary

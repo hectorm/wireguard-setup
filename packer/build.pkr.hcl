@@ -51,19 +51,13 @@ build {
           apt-utils \
           ca-certificates \
           dns-root-data \
-          gcc \
           gettext-base \
-          git \
           htop \
-          libc6-dev \
-          libsystemd-dev \
           linux-virtual-hwe-"$(lsb_release -rs)" \
           locales \
-          make \
           nano \
           nftables \
           openresolv \
-          pkgconf \
           qrencode \
           unattended-upgrades \
           unbound \
@@ -92,15 +86,6 @@ build {
         systemctl enable --now unbound.service unbound-resolvconf.service
       EOT
       ,
-      # Build and install udptunnel
-      <<-EOT
-        mkdir /usr/local/src/udptunnel/ && cd /usr/local/src/udptunnel/
-        git clone 'https://github.com/hectorm/udptunnel.git' ./
-        git checkout '796e53532fbd6acc4d51849d161b4e08cc187263'
-        make install-strip PREFIX=/usr/local
-        udptunnel --help
-      EOT
-      ,
       # Setup services and timers
       <<-EOT
         systemctl enable \
@@ -109,7 +94,6 @@ build {
           apt-daily.timer \
           nftables.service \
           ssh.service \
-          udptunnel.service \
           unattended-upgrades.service \
           wg-quick@wg0.service
         systemctl mask \

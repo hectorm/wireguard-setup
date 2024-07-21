@@ -1,9 +1,0 @@
-[Unit]
-Description=udptunnel socket
-
-[Socket]
-ListenStream=443
-BindIPv6Only=both
-
-[Install]
-WantedBy=sockets.target

@@ -93,6 +93,8 @@ jobs:
             PKR_VAR_qemu_efi_firmware_vars=/usr/share/OVMF/OVMF_VARS_4M.fd
       - name: "Test image"
         run: |
+          EFI_FIRMWARE_CODE=/usr/share/OVMF/OVMF_CODE_4M.fd \
+          EFI_FIRMWARE_VARS=/usr/share/OVMF/OVMF_VARS_4M.fd \
           ./qemu/start-vm.sh &
           set -- sshpass -p toor ssh root@127.0.0.1 -p 1122 -o StrictHostKeyChecking=no -o ConnectTimeout=1
           attempt=0; until [ "${attempt:?}" -gt 60 ] || "$@" exit; do attempt=$((attempt+1)); sleep 5; done

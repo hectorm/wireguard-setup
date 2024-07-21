@@ -53,8 +53,8 @@ source "qemu" "main" {
 
   headless     = true
   accelerator  = var.qemu_binary == "qemu-system-aarch64" ? "none" : null
-  machine_type = var.qemu_binary == "qemu-system-aarch64" ? "virt,gic-version=3" : "q35"
-  cpu_model    = var.qemu_binary == "qemu-system-aarch64" ? "cortex-a76" : null
+  machine_type = var.qemu_binary == "qemu-system-aarch64" ? "virt,gic-version=max" : "q35"
+  cpu_model    = var.qemu_binary == "qemu-system-aarch64" ? "cortex-a76" : "max"
   cpus         = 2
   memory       = 1024
   qemu_binary  = var.qemu_binary
@@ -93,8 +93,8 @@ source "qemu" "baremetal" {
 
   headless     = true
   accelerator  = var.qemu_binary == "qemu-system-aarch64" ? "none" : null
-  machine_type = var.qemu_binary == "qemu-system-aarch64" ? "virt,gic-version=3" : "q35"
-  cpu_model    = var.qemu_binary == "qemu-system-aarch64" ? "cortex-a76" : null
+  machine_type = var.qemu_binary == "qemu-system-aarch64" ? "virt,gic-version=max" : "q35"
+  cpu_model    = var.qemu_binary == "qemu-system-aarch64" ? "cortex-a76" : "max"
   cpus         = 2
   memory       = 1024
   qemu_binary  = var.qemu_binary

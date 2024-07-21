@@ -30,12 +30,12 @@ case "${QEMU_SYSTEM_BINARY#*qemu-system-}" in
 	x86_64)
 		: "${EFI_FIRMWARE_CODE:=/usr/share/edk2/x64/OVMF_CODE.4m.fd}"
 		: "${EFI_FIRMWARE_VARS:=/usr/share/edk2/x64/OVMF_VARS.4m.fd}"
-		set -- "$@" -machine q35 -smp 2 -m 1024
+		set -- "$@" -machine q35 -smp 2 -m 1024 -cpu max
 		;;
 	aarch64)
 		: "${EFI_FIRMWARE_CODE:=/usr/share/AAVMF/AAVMF_CODE.fd}"
 		: "${EFI_FIRMWARE_VARS:=/usr/share/AAVMF/AAVMF_VARS.fd}"
-		set -- "$@" -machine virt,gic-version=3 -cpu cortex-a76 -smp 2 -m 1024
+		set -- "$@" -machine virt,gic-version=max -cpu cortex-a76 -smp 2 -m 1024
 		;;
 esac
 set -- "$@" -nographic -serial mon:stdio
@@ -53,7 +53,7 @@ set -- "$@" -drive file="${EFI_FIRMWARE_VARS:?}",if=pflash,unit=1,format=raw,sna
 
 # Use KVM if available
 if [ -w /dev/kvm ] && [ "${QEMU_SYSTEM_BINARY#*qemu-system-}" = "$(uname -m)" ]; then
-	set -- "$@" -accel kvm -cpu host
+	set -- "$@" -accel kvm
 fi
 
 # Create a snapshot image to preserve the original image

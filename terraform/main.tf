@@ -12,8 +12,9 @@ provider "hcloud" {
 }
 
 data "hcloud_image" "wg_image" {
-  with_selector = "service=wireguard"
-  most_recent   = true
+  with_selector     = "service=wireguard"
+  with_architecture = "arm"
+  most_recent       = true
 }
 
 resource "hcloud_firewall" "wg_firewall" {
@@ -40,17 +41,10 @@ resource "hcloud_firewall" "wg_firewall" {
     source_ips  = ["0.0.0.0/0", "::0/0"]
   }
   rule {
-    description = "WireGuard"
+    description = "WireGuard (alt)"
     direction   = "in"
     protocol    = "udp"
     port        = "53"
-    source_ips  = ["0.0.0.0/0", "::0/0"]
-  }
-  rule {
-    description = "WireGuard"
-    direction   = "in"
-    protocol    = "tcp"
-    port        = "443"
     source_ips  = ["0.0.0.0/0", "::0/0"]
   }
 }

@@ -3,7 +3,9 @@
 
 users: []
 disable_root: false
-chpasswd: { list: ["root:toor"], expire: false }
+chpasswd:
+  users: [{ name: "root", password: "toor", type: "text" }]
+  expire: false
 runcmd:
   - "printf 'PermitRootLogin yes\nPasswordAuthentication yes\n' > /etc/ssh/sshd_config.d/50-cloud-init.conf"
   - "systemctl try-reload-or-restart ssh.service; sleep 5; rm -f /etc/ssh/sshd_config.d/50-cloud-init.conf"

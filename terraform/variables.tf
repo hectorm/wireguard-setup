@@ -13,7 +13,7 @@ variable "wg_server_name" {
 variable "wg_server_type" {
   type        = string
   description = "Server type"
-  default     = "cx11"
+  default     = "cax11"
 }
 
 variable "wg_server_location" {

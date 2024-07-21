@@ -52,11 +52,10 @@ build {
           dns-root-data \
           gettext-base \
           htop \
-          linux-virtual-hwe-"$(lsb_release -rs)" \
+          knot-dnsutils \
           locales \
           nano \
           nftables \
-          openresolv \
           qrencode \
           unattended-upgrades \
           unbound \
@@ -80,9 +79,14 @@ build {
       ,
       # Replace systemd-resolved with Unbound
       <<-EOT
-        systemctl mask --now systemd-resolved.service
-        unlink /etc/resolv.conf && printf 'nameserver 127.0.0.1\n' > /etc/resolv.conf
-        systemctl enable --now unbound.service unbound-resolvconf.service
+        systemctl mask --now systemd-resolved.service unbound-resolvconf.service
+        systemctl enable --now unbound.service
+        unlink /etc/resolv.conf
+        {
+          printf 'nameserver %s\n' '127.0.0.1' '::1';
+          printf 'options %s\n' 'trust-ad';
+        } > /etc/resolv.conf
+        chattr +i /etc/resolv.conf
       EOT
       ,
       # Setup services and timers

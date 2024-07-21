@@ -3,7 +3,7 @@ source "hcloud" "main" {
 
   image       = "ubuntu-22.04"
   server_name = "wireguard-{{timestamp}}"
-  server_type = "cx11"
+  server_type = "cax11"
   location    = "fsn1"
 
   snapshot_name = "wireguard-{{timestamp}}"
